@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/DeployableAirGrid1.png</file>
+        <file>images/DeployableBlueGateGrid1.png</file>
+        <file>images/DeployableGroundGrid1.png</file>
+        <file>images/DeployableRedGateGrid1.png</file>
+        <file>images/UndeployableAirGrid1.png</file>
+        <file>images/UndeployableGroundGrid1.png</file>
+        <file>images/pauseBtn.png</file>
+        <file>images/enemyDemo1.png</file>
+        <file>images/enemyDemo2.png</file>
+        <file>images/enemyDemo1Flipped.png</file>
+        <file>images/enemyDemo2Flipped.png</file>
+    </qresource>
+</RCC>
