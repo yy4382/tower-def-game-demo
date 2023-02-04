@@ -14,6 +14,7 @@ AbstractEnemy::AbstractEnemy(const enemyBasicAttr &a) : appearanceFileName(a.app
                                                         health(healthLimit),
                                                         atk(a.atk), def(a.def), speed(a.speed),
                                                         isFlyingObject(a.isFlyingObject) {
+    //设置位置和大小
     setPos(path[pathIndex].x(), path[pathIndex].y());
     setRect(game->gridSizeX / 2 - 2.5, game->gridSizeY / 2 - 2.5, 5, 5);
     bool ifFlipped = false;
@@ -21,7 +22,8 @@ AbstractEnemy::AbstractEnemy(const enemyBasicAttr &a) : appearanceFileName(a.app
     if (ln.angle() > 90 && ln.angle() < 270) ifFlipped = true;
     appearance = new QGraphicsPixmapItem(this);
     setAppearance(ifFlipped);
-//    qDebug() << "created" << pos().x() << " " << pos().y();
+
+    //敌人活动的计时器
     enemyMoveTimer = new QTimer();
     connect(enemyMoveTimer, SIGNAL(timeout()), this, SLOT(move()));
     enemyMoveTimer->start(20);

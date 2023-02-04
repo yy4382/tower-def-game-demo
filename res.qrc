@@ -9,7 +9,20 @@
         <file>images/pauseBtn.png</file>
         <file>images/enemyDemo1.png</file>
         <file>images/enemyDemo2.png</file>
-        <file>images/enemyDemo1Flipped.png</file>
-        <file>images/enemyDemo2Flipped.png</file>
+        <file>.gitignore</file>
+        <file>images/fengFight.png</file>
+        <file>images/fengMG.png</file>
+        <file>images/KroosFight.png</file>
+        <file>images/KroosMG.png</file>
+        <file>images/LavaFight.png</file>
+        <file>images/AdnachielFight.png</file>
+        <file>images/AdnachielMG.png</file>
+        <file>images/anselFight.png</file>
+        <file>images/anselMG.png</file>
+        <file>images/bandianFight.png</file>
+        <file>images/bandianMG.png</file>
+        <file>images/LavaMG.png</file>
+        <file>images/DeployableAirGridGreen.png</file>
+        <file>images/DeployableGroundGridGreen.png</file>
     </qresource>
 </RCC>

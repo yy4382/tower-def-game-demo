@@ -6,8 +6,7 @@
 
 
 GateGrid::GateGrid(int sizeX, int sizeY, const QPointF &location, const QString &appr,
-                   const QString &type,
-                   QGraphicsPixmapItem *parent) : AbstractGrid(location, sizeX, sizeY, appr) {
+                   const QString &greenAppr, const QString &type, QGraphicsPixmapItem *parent) : AbstractGrid(location, sizeX, sizeY, appr,greenAppr) {
     if (type == "blueGate") gateType = 1;
     if (type == "redGate") gateType = 2;
 }

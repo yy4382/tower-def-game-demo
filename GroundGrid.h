@@ -9,12 +9,14 @@
 
 class GroundGrid : public AbstractGrid {
 private:
-    bool deployability;
+    bool deployAbility;
 
 public:
-    GroundGrid(int size, int sizeY, const QPointF &location, const QString &appr, bool _deployability,
+    GroundGrid(int size, int sizeY, const QPointF &location, const QString &appr,
+               const QString &greenAppr, bool _deployability,
                QGraphicsPixmapItem *parent = nullptr);
-
+    gridType getType() override { return groundGrid; }
+    bool getDeployAbility() override {return deployAbility;}
 };
 
 

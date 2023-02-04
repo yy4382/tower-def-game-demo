@@ -8,12 +8,13 @@
 #include "AbstractGrid.h"
 class AirGrid :public AbstractGrid{
 private:
-    bool deployability;
+    bool deployAbility;
 
 public:
-    AirGrid(int sizeX, int sizeY, const QPointF &location, const QString &appr, bool _deployability,
+    AirGrid(int sizeX, int sizeY, const QPointF &location, const QString &appr,const QString &greenAppr, bool _deployability,
                QGraphicsPixmapItem *parent = nullptr);
-
+    gridType getType() override { return airGrid; }
+    bool getDeployAbility() override {return deployAbility;}
 };
 
 

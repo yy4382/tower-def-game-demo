@@ -5,11 +5,17 @@
 #ifndef TOWERDEF_GAMECONTROL_H
 #define TOWERDEF_GAMECONTROL_H
 
-#include "AbstractGrid.h"
 #include "GroundGrid.h"
 #include "GateGrid.h"
-#include "AbstractEnemy.h"
 #include "AirGrid.h"
+
+#include "AbstractEnemy.h"
+
+#include "ShooterFriend.h"
+#include "DefenderFriend.h"
+#include "VanguardFriend.h"
+#include "HealerFriend.h"
+#include "SplashCasterFriend.h"
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -18,26 +24,27 @@
 #include <utility>
 #include <QPointF>
 #include <QTimer>
+#include <QMouseEvent>
 
-struct GridAttr {
-    GridAttr(QString appr_, bool deploy_, bool ground_, QString type_ = "null")
-            : appearance(std::move(appr_)),
-              deployability(deploy_),
-              ground(ground_),
-              type(std::move(type_)) {}
-
-    QString appearance;
-    bool deployability;
-    bool ground;
-    QString type;
-};
 
 class GameControl : public QGraphicsView {
 Q_OBJECT
+
+
+
+
 public:
     GameControl();
+    enum GameStatus {normal,build, showDetail, success};
+    GameStatus gameStatus;
     int gridSizeX;
     int gridSizeY;
+    AbstractFriendObjects *cursor;
+    void setGroundGridGreen(bool g);
+    void setAirGridGreen(bool g);
+    QList<AbstractEnemy*> enemyList;
+    QList<AbstractFriendObjects*> friendList;
+    QList<AbstractGrid*> gridList;
 
 private:
     QGraphicsScene *scene;
@@ -50,10 +57,13 @@ private:
     int viewWidth;
     int viewHeight;
 
+    //friendObject related
+    int friendTotalNum;
+    QList<AbstractFriendAttr *> *friendAttrList;
 
     //enemy related
     int enemyTotalNum;
-    QList<enemyBasicAttr*> *enemyList;
+    QList<enemyBasicAttr *> *enemyAttrList;
     int curBirthEnemy;
 
     //read info
@@ -61,15 +71,26 @@ private:
 
     void readEnemyInfo(const QString &mapName);
 
+    void readFriendInfo(const QString &mapName);
+
     QPointF indexToCoordinate(int x, int y) const;
 
-    //initial
+    //initializing
     void initBackground();
 
     void initEnemy();
 
+
 public slots:
+
     void newEnemy();
+
+    void initFriend();
+
+protected:
+    virtual void mousePressEvent(QMouseEvent *event) override;
+
+    void mouseMoveEvent(QMouseEvent *event) override;
 };
 
 

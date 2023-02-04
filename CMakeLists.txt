@@ -20,7 +20,7 @@ add_executable(TowerDef
         AbstractGrid.cpp AbstractGrid.h
         GroundGrid.cpp GroundGrid.h
         res.qrc
-        AirGrid.cpp AirGrid.h GateGrid.cpp GateGrid.h AbstractEnemy.cpp AbstractEnemy.h AbstractFriendObjects.cpp AbstractFriendObjects.h)
+        AirGrid.cpp AirGrid.h GateGrid.cpp GateGrid.h AbstractEnemy.cpp AbstractEnemy.h AbstractFriendObjects.cpp AbstractFriendObjects.h DefenderFriend.cpp DefenderFriend.h ShooterFriend.cpp ShooterFriend.h VanguardFriend.cpp VanguardFriend.h HealerFriend.cpp HealerFriend.h SplashCasterFriend.cpp SplashCasterFriend.h)
 target_link_libraries(TowerDef
         Qt5::Core
         Qt5::Gui
