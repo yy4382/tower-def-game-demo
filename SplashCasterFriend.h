@@ -12,11 +12,7 @@ public:
 
     SplashCasterFriend(int blockNum, int cost, double healthLimit, double atk, double def,
                        double atkInterval, const QString &appearFileName, const QString &msFileName,
-                       QGraphicsRectItem *parent = nullptr) : AbstractFriendObjects(blockNum, cost,
-                                                                          healthLimit, atk, def,
-                                                                          atkInterval,
-                                                                          appearFileName,
-                                                                          msFileName, parent) {}
+                       QGraphicsRectItem *parent = nullptr);
 };
 
 

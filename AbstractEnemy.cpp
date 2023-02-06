@@ -18,9 +18,15 @@ AbstractEnemy::AbstractEnemy(const enemyBasicAttr &a) : appearanceFileName(a.app
     setPos(path[pathIndex].x(), path[pathIndex].y());
     setRect(game->gridSizeX / 2 - 2.5, game->gridSizeY / 2 - 2.5, 5, 5);
     bool ifFlipped = false;
-    QLineF ln(pos(),path[pathIndex+1]);
+    QLineF ln(pos(), path[pathIndex + 1]);
     if (ln.angle() > 90 && ln.angle() < 270) ifFlipped = true;
     appearance = new QGraphicsPixmapItem(this);
+    hpFullBar = new QGraphicsRectItem(this);
+    hpFullBar->setRect(10,game->gridSizeY-20,health/healthLimit*(game->gridSizeX-20),10);
+    hpBar = new QGraphicsRectItem(this);
+    setHpBar();
+    QBrush hpBrush (Qt::red,Qt::SolidPattern);
+    hpBar->setBrush(hpBrush);
     setAppearance(ifFlipped);
 
     //敌人活动的计时器
@@ -28,6 +34,8 @@ AbstractEnemy::AbstractEnemy(const enemyBasicAttr &a) : appearanceFileName(a.app
     connect(enemyMoveTimer, SIGNAL(timeout()), this, SLOT(move()));
     enemyMoveTimer->start(20);
     pathIndex++;
+
+
 }
 
 void AbstractEnemy::move() {
@@ -35,13 +43,13 @@ void AbstractEnemy::move() {
     if (ln.length() <= 5) {
         pathIndex++;
         if (pathIndex >= path.size()) {
-            die(0);
+            die(arriveAtDest);
             return;
         }
         ln = QLineF(pos(), path[pathIndex]);
         if (ln.angle() > 90 && ln.angle() < 270) {
             setAppearance(true);
-        }else {
+        } else {
             setAppearance(false);
         }
     }
@@ -51,15 +59,33 @@ void AbstractEnemy::move() {
     setPos(x() + dx, y() + dy);
 }
 
-void AbstractEnemy::die(int type) {
+void AbstractEnemy::die(dieType cause) {
+    if(cause == arriveAtDest){}
+
     delete enemyMoveTimer;
     delete this;
 }
 
 void AbstractEnemy::setAppearance(bool ifFlipped) {
-    QPixmap look {appearanceFileName};
-    if(ifFlipped) look = look.transformed(QTransform().scale(-1,1));
+    QPixmap look{appearanceFileName};
+    if (ifFlipped) look = look.transformed(QTransform().scale(-1, 1));
     look = look.scaledToWidth(game->gridSizeX);
     appearance->setPixmap(look);
-    appearance->setOffset(0,-look.height()+game->gridSizeY*0.8);
+    appearance->setOffset(0, -look.height() + game->gridSizeY * 0.8);
 }
+
+double AbstractEnemy::distanceLeft() {
+    QLineF ln{this->pos(),path.at(path.size()-1)};
+    return ln.length();
+}
+
+void AbstractEnemy::beAttacked(double damage) {
+    health = health-damage+def;
+    setHpBar();
+    if(health<=0) die(hp_0);
+}
+
+void AbstractEnemy::setHpBar() {
+    hpBar->setRect(10,game->gridSizeY-20,health/healthLimit*(game->gridSizeX-20),10);
+}
+

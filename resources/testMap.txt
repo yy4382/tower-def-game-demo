@@ -1,0 +1,78 @@
+1600 1100
+160 160
+0 70
+10 5
+
+#start
+://images/DeployableGroundGrid1.png
+://images/DeployableGroundGridGreen.png
+1 1
+#end
+
+#start
+://images/UndeployableGroundGrid1.png
+://images/UndeployableGroundGrid1.png
+0 1
+#end
+
+#start
+://images/DeployableAirGrid1.png
+://images/DeployableAirGridGreen.png
+1 0
+#end
+
+#start
+://images/UndeployableAirGrid1.png
+://images/UndeployableAirGrid1.png
+0 0
+#end
+
+#start
+://images/DeployableRedGateGrid1.png
+://images/DeployableRedGateGrid1.png
+0 0
+redGate
+#end
+
+#start
+://images/DeployableBlueGateGrid1.png
+://images/DeployableBlueGateGrid1.png
+0 0
+blueGate
+#end
+#endGridAttr
+
+3 2 2 2 0 0 0 0 1 4 3 2 0 0 0 2 2 2 1 1 5 0 0 2 0 0 0 0 1 4 3 2 0 0 0 2 2 2 1 1 3 2 2 2 0 0 0 0 1 4
+
+9 0 4 0 4 1 2 1 2 2 0 2
+9 2 4 2 4 1 2 1 2 2 0 2
+9 2 4 2 4 3 2 3 2 2 0 2
+9 4 4 4 4 3 2 3 2 2 0 2
+#endPathAttr
+
+3
+
+1000 185 0 1 0 ://images/enemyDemo1.png
+1700 250 50 1.1 0 ://images/enemyDemo2.png
+1650 200 100 1.1 0 ://images/enemyDemo2.png
+#endEnemyType
+
+0 0 3000
+0 3 6000
+0 3 6500
+0 1 9000
+0 1 11500
+0 2 9500
+0 2 12000
+1 0 16000
+1 0 19500
+2 3 17500
+#endEnemyInfo
+
+1 27 878 453 69 2900 ://images/LavaFight.png ://images/LavaMG.png 5
+1 9 831 251 93 1000 ://images/KroosFight.png ://images/KroosMG.png 1
+1 9 831 251 93 1000 ://images/AdnachielFight.png ://images/AdnachielMG.png 1
+2 9 1060 235 187 1050 ://images/fengFight.png ://images/fengMG.png 4
+3 15 1429 236 331 1200 ://images/bandianFight.png ://images/bandianMG.png 2
+1 15 907 257 81 2850 ://images/anselFight.png ://images/anselMG.png 3
+#endFriend

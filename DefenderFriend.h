@@ -14,9 +14,7 @@ public:
 
     DefenderFriend(int blockNum, int cost, double healthLimit, double atk, double def,
                    double atkInterval, const QString &appearanceFileName,
-                   const QString &msFileName,QGraphicsRectItem *parent = nullptr) : AbstractFriendObjects(blockNum, cost, healthLimit,
-                                                                      atk, def, atkInterval,
-                                                                      appearanceFileName, msFileName,parent) {}
+                   const QString &msFileName,QGraphicsRectItem *parent = nullptr);
 };
 
 

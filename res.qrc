@@ -24,5 +24,9 @@
         <file>images/LavaMG.png</file>
         <file>images/DeployableAirGridGreen.png</file>
         <file>images/DeployableGroundGridGreen.png</file>
+        <file>images/pointer.png</file>
+    </qresource>
+    <qresource prefix="/mapInfo">
+        <file>resources/testMap.txt</file>
     </qresource>
 </RCC>

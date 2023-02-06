@@ -3,12 +3,23 @@
 //
 
 #include "GameControl.h"
+
+#include "ShooterFriend.h"
+#include "DefenderFriend.h"
+#include "VanguardFriend.h"
+#include "HealerFriend.h"
+#include "SplashCasterFriend.h"
+#include "GroundGrid.h"
+#include "GateGrid.h"
+#include "AirGrid.h"
+
 #include <QDebug>
+#include <QFile>
+#include <QBitArray>
 
 GameControl::GameControl() : curBirthEnemy(0) {
-    readMapInfo("testMap");
-    readEnemyInfo("testMap");
-    readFriendInfo("testMap");
+    readInfo(":/mapInfo/resources/testMap.txt");
+//    readFriendInfo("testMap");
 
     //set view rect
     setFixedSize(viewWidth, viewHeight);
@@ -39,28 +50,28 @@ void GameControl::initBackground() {
     int index = 0;
     for (int i = 0; i < rowY; i++) {
         for (int j = 0; j < rowX; j++) {
-            if ((gridAttr + index)->type != "null") {
+            if ((gridAttrList->at(index))->type != "null") {
                 //Gate
                 auto *grid = new GateGrid(gridSizeX, gridSizeY, QPointF(x, y),
-                                          (gridAttr + index)->appearance,
-                                          (gridAttr + index)->greenAppearance,
-                                          (gridAttr + index)->type);
+                                          (gridAttrList->at(index))->appearance,
+                                          (gridAttrList->at(index))->greenAppearance,
+                                          (gridAttrList->at(index))->type);
                 scene->addItem(grid);
                 gridList << grid;
-            } else if ((gridAttr + index)->ground == 1) {
+            } else if ((gridAttrList->at(index))->ground == 1) {
                 //ground grid
                 auto *grid = new GroundGrid(gridSizeX, gridSizeY, QPointF(x, y),
-                                            (gridAttr + index)->appearance,
-                                            (gridAttr + index)->greenAppearance,
-                                            (gridAttr + index)->deployability);
+                                            (gridAttrList->at(index))->appearance,
+                                            (gridAttrList->at(index))->greenAppearance,
+                                            (gridAttrList->at(index))->deployability);
                 scene->addItem(grid);
                 gridList << grid;
-            } else if ((gridAttr + index)->ground == 0) {
+            } else if ((gridAttrList->at(index))->ground == 0) {
                 // air grid
                 auto *grid = new AirGrid(gridSizeX, gridSizeY, QPointF(x, y),
-                                         (gridAttr + index)->appearance,
-                                         (gridAttr + index)->greenAppearance,
-                                         (gridAttr + index)->deployability);
+                                         (gridAttrList->at(index))->appearance,
+                                         (gridAttrList->at(index))->greenAppearance,
+                                         (gridAttrList->at(index))->deployability);
                 scene->addItem(grid);
                 gridList << grid;
             }
@@ -80,37 +91,6 @@ void GameControl::initBackground() {
 
 }
 
-void GameControl::readMapInfo(const QString &mapName) {
-    //过渡代码  MapInfo从文件读入
-    viewWidth = 1600;
-    viewHeight = 1100;
-    gridSizeX = 160;
-    gridSizeY = 160;
-    marginLeftAndRight = 0;
-    marginUp = 70;
-    QString gd(":/images/DeployableGroundGrid1.png"),
-            gu(":/images/UndeployableGroundGrid1.png"),
-            rg(":/images/DeployableRedGateGrid1.png"),
-            bg(":/images/DeployableBlueGateGrid1.png"),
-            ad(":/images/DeployableAirGrid1.png"),
-            au(":/images/UndeployableAirGrid1.png");
-    GridAttr gda(gd, "://images/DeployableGroundGridGreen.png", true, true),
-            gua(gu, gu, false, true),
-            ada(ad, "://images/DeployableAirGridGreen.png", true, false),
-            aua(au, au, false, false),
-            rga(rg, rg, false, false, "redGate"),
-            bga(bg, bg, false, false, "blueGate");
-    rowX = 10;
-    rowY = 5;
-    gridAttr = new GridAttr[50]
-            {
-                    aua, ada, ada, ada, gda, gda, gda, gda, gua, rga,
-                    aua, ada, gda, gda, gda, ada, ada, ada, aua, aua,
-                    bga, gda, gda, ada, gda, gda, gda, gda, gua, rga,
-                    aua, ada, gda, gda, gda, ada, ada, ada, aua, aua,
-                    aua, ada, ada, ada, gda, gda, gda, gda, gua, rga
-            };
-}
 
 QPointF GameControl::indexToCoordinate(int x, int y) const {
     double xx = marginLeftAndRight, yy = marginUp;
@@ -119,48 +99,6 @@ QPointF GameControl::indexToCoordinate(int x, int y) const {
     return {xx, yy};
 }
 
-void GameControl::readEnemyInfo(const QString &mapName) {
-    enemyTotalNum = 10;
-    enemyAttrList = new QList<enemyBasicAttr *>();
-
-    // 过渡代码  readEnemyInfo 从文件读入
-    QList<QPointF> typeUp, typeMiddleUp, typeMiddleDown, typeDown;
-    typeUp << indexToCoordinate(9, 0) << indexToCoordinate(4, 0) << indexToCoordinate(4, 1)
-           << indexToCoordinate(2, 1) << indexToCoordinate(2, 2) << indexToCoordinate(0, 2);
-    typeMiddleUp << indexToCoordinate(9, 2) << indexToCoordinate(4, 2) << indexToCoordinate(4, 1)
-                 << indexToCoordinate(2, 1) << indexToCoordinate(2, 2) << indexToCoordinate(0, 2);
-    typeMiddleDown << indexToCoordinate(9, 2) << indexToCoordinate(4, 2) << indexToCoordinate(4, 3)
-                   << indexToCoordinate(2, 3) << indexToCoordinate(2, 2) << indexToCoordinate(0, 2);
-    typeDown << indexToCoordinate(9, 4) << indexToCoordinate(4, 4) << indexToCoordinate(4, 3)
-             << indexToCoordinate(2, 3) << indexToCoordinate(2, 2) << indexToCoordinate(0, 2);
-    double speed1 = 3;
-    auto *a1 = new enemyBasicAttr{3000, typeUp, 1000, 185, 0,
-                                  speed1, false, "://images/enemyDemo1.png"};
-    auto *a2 = new enemyBasicAttr{6000, typeDown, 1000, 100, 0,
-                                  speed1, false, "://images/enemyDemo1.png"};
-    auto *a3 = new enemyBasicAttr{6500, typeDown, 1000, 100, 0,
-                                  speed1, false, "://images/enemyDemo1.png"};
-    auto *a4 = new enemyBasicAttr{9000, typeMiddleUp, 1000, 100,
-                                  0, speed1, false, "://images/enemyDemo1.png"};
-    auto *a5 = new enemyBasicAttr{11500, typeMiddleUp, 1000, 100,
-                                  0, speed1, false, "://images/enemyDemo1.png"};
-    auto *a6 = new enemyBasicAttr{9500, typeMiddleDown, 1000, 100,
-                                  0, speed1, false, "://images/enemyDemo1.png"};
-    auto *a7 = new enemyBasicAttr{12000, typeMiddleDown, 1000, 100,
-                                  0, speed1, false, "://images/enemyDemo1.png"};
-    auto *b8 = new enemyBasicAttr{16000, typeUp, 1700, 250, 50,
-                                  speed1 * 1.1, false, "://images/enemyDemo2.png"};
-    auto *b9 = new enemyBasicAttr{19500, typeUp, 1700, 250, 50,
-                                  speed1 * 1.1, false, "://images/enemyDemo2.png"};
-    auto *c10 = new enemyBasicAttr{17500, typeDown, 1650, 200,
-                                   100, speed1 * 1.1, false, "://images/enemyDemo2.png"};
-
-    *enemyAttrList << a1 << a2 << a3 << a4 << a5 << a6 << a7 << b8 << b9 << c10;
-    std::sort(enemyAttrList->begin(), enemyAttrList->end(),
-              [](const enemyBasicAttr *a, const enemyBasicAttr *b) -> bool {
-                  return a->birthTime < b->birthTime;
-              });
-}
 
 void GameControl::readFriendInfo(const QString &mapName) {
     friendTotalNum = 6;
@@ -201,11 +139,11 @@ void GameControl::readFriendInfo(const QString &mapName) {
 }
 
 void GameControl::initEnemy() {
-    for (int i = 0; i < enemyAttrList->size(); i++) {
+    for (auto i: *enemyAttrList) {
         auto birthTimer = new QTimer();
         birthTimer->setSingleShot(true);
         connect(birthTimer, SIGNAL(timeout()), this, SLOT(newEnemy()));
-        birthTimer->start(enemyAttrList->at(i)->birthTime);
+        birthTimer->start(i->birthTime);
     }
 }
 
@@ -265,6 +203,8 @@ void GameControl::initFriend() {
                                                    i->appearanceFileName,
                                                    i->MugShotFileName);
                 break;
+            case AbstractFriendObjects::null:
+                break;
         }
         friendObj->setPos(posX, viewHeight - gridSizeY);
         posX -= gridSizeX;
@@ -273,7 +213,6 @@ void GameControl::initFriend() {
 }
 
 void GameControl::mousePressEvent(QMouseEvent *event) {
-    qDebug() << "pressed";
     if (cursor) {
         for (auto i: gridList) {
             if (((cursor->getType() == AbstractFriendObjects::Vanguard ||
@@ -291,11 +230,12 @@ void GameControl::mousePressEvent(QMouseEvent *event) {
                     setAirGridGreen(false);
                     setGroundGridGreen(false);
                     cursor = nullptr;
-                    gameStatus = normal;
-                    qDebug() << "into normal";
+                    gameStatus = selectDir;
                     break;
                 }
         }
+    } else if (gameStatus == selectDir) {
+
     }
     QGraphicsView::mousePressEvent(event);
 }
@@ -327,3 +267,162 @@ void GameControl::setGroundGridGreen(bool g) {
             if (i->getType() == AbstractGrid::groundGrid && i->getDeployAbility()) i->setDefault();
         }
 }
+
+void GameControl::readInfo(const QString &mapName) {
+    //打开文件
+    QFile qFile{mapName};
+    qFile.open(QIODevice::ReadOnly);
+
+    //读取地图基本信息
+    QByteArray byteArrayRead = qFile.readLine();
+    QList<QByteArray> listRead = byteArrayRead.split(' ');
+    viewWidth = listRead[0].trimmed().toInt();
+    viewHeight = listRead[1].trimmed().toInt();
+
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    gridSizeX = listRead[0].trimmed().toInt();
+    gridSizeY = listRead[1].trimmed().toInt();
+
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    marginLeftAndRight = listRead[0].trimmed().toInt();
+    marginUp = listRead[1].trimmed().toInt();
+
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    rowX = listRead[0].trimmed().toInt();
+    rowY = listRead[1].trimmed().toInt();
+
+    //读取格子种类
+    auto gridAttrType = new QList<GridAttr *>;
+    while (true) {
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead == "\r\n") continue;
+        byteArrayRead = qFile.readLine();
+        QString appr = QString(byteArrayRead);
+        appr.chop(2);
+
+        byteArrayRead = qFile.readLine();
+        QString greenAppr = QString(byteArrayRead);
+        greenAppr.chop(2);
+
+        byteArrayRead = qFile.readLine();
+        listRead = byteArrayRead.split(' ');
+        bool deploy = listRead[0].trimmed().toInt();
+        bool ground = listRead[1].trimmed().toInt();
+
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead.trimmed() == "#end") {
+            auto temp = new GridAttr(appr, greenAppr, deploy, ground);
+            *gridAttrType << temp;
+        } else {
+            auto temp = new GridAttr(appr, greenAppr, deploy, ground, QString(byteArrayRead));
+            *gridAttrType << temp;
+            byteArrayRead = qFile.readLine();
+        }
+
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead.trimmed() == "#endGridAttr") break;
+    }
+    //读取格子位置信息
+    gridAttrList = new QList<GridAttr *>;
+    byteArrayRead = qFile.readLine();
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    for (const auto &i: listRead) {
+        int typeIndex = i.toInt();
+        *gridAttrList << gridAttrType->at(typeIndex);
+    }
+
+    //敌人路径种类
+    auto *pathType = new QList<QList<QPointF> *>;
+    byteArrayRead = qFile.readLine();
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    while (true) {
+        auto index = new QList<QPointF>;
+        for (int i = 0; i < listRead.size(); i += 2)
+            index->append(indexToCoordinate(listRead[i].trimmed().toInt(),
+                                            listRead[i + 1].trimmed().toInt()));
+        *pathType << index;
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead.trimmed() == "#endPathAttr") break;
+        listRead = byteArrayRead.split(' ');
+    }
+
+    qFile.readLine();
+    byteArrayRead = qFile.readLine();
+    double speed1 = byteArrayRead.trimmed().toDouble();
+    qFile.readLine();
+
+    //敌人种类
+    struct enemyTypeAttr {
+        double healthLimit{}, atk{}, def{}, speed{};
+        bool fly{};
+        QString appearance;
+    };
+    auto enemyTypeList = new QList<enemyTypeAttr *>;
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    while (true) {
+        auto tempEnemyType = new enemyTypeAttr;
+        tempEnemyType->healthLimit = listRead[0].toDouble();
+        tempEnemyType->atk = listRead[1].toDouble();
+        tempEnemyType->def = listRead[2].toDouble();
+        tempEnemyType->speed = listRead[3].toDouble();
+        tempEnemyType->fly = listRead[4].toInt();
+        tempEnemyType->appearance = QString(listRead[5]).left(QString(listRead[5]).length() - 2);
+        *enemyTypeList << tempEnemyType;
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead.trimmed() == "#endEnemyType") break;
+        listRead = byteArrayRead.split(' ');
+    }
+
+    //出怪列表
+    enemyAttrList = new QList<enemyBasicAttr *>;
+    qFile.readLine();
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    while (true) {
+        int typeIndex = listRead[0].trimmed().toInt();
+        int pathIndex = listRead[1].trimmed().toInt();
+        *enemyAttrList << new enemyBasicAttr{listRead[2].trimmed().toInt(), pathType->at(pathIndex),
+                                             enemyTypeList->at(typeIndex)->healthLimit,
+                                             enemyTypeList->at(typeIndex)->atk,
+                                             enemyTypeList->at(typeIndex)->def,
+                                             speed1 * enemyTypeList->at(typeIndex)->speed,
+                                             enemyTypeList->at(typeIndex)->fly,
+                                             enemyTypeList->at(typeIndex)->appearance};
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead.trimmed() == "#endEnemyInfo") break;
+        listRead = byteArrayRead.split(' ');
+    }
+    std::sort(enemyAttrList->begin(), enemyAttrList->end(),
+              [](const enemyBasicAttr *a, const enemyBasicAttr *b) -> bool {
+                  return a->birthTime < b->birthTime;
+              });
+    enemyTotalNum = enemyAttrList->size();
+
+    //友方单位
+    friendAttrList = new QList<AbstractFriendAttr *>;
+    qFile.readLine();
+    byteArrayRead = qFile.readLine();
+    listRead = byteArrayRead.split(' ');
+    while (true) {
+        *friendAttrList << new AbstractFriendAttr{listRead[0].toInt(),
+                                                  listRead[1].toInt(),
+                                                  listRead[2].toDouble(),
+                                                  listRead[3].toDouble(),
+                                                  listRead[4].toDouble(),
+                                                  listRead[5].toDouble(),
+                                                  QString(listRead[6]),
+                                                  QString(listRead[7]),
+                                                  AbstractFriendObjects::intToFriendType(
+                                                          listRead[8].toInt())};
+        byteArrayRead = qFile.readLine();
+        if (byteArrayRead.trimmed() == "#endFriend") break;
+        listRead = byteArrayRead.split(' ');
+    }
+}
+
