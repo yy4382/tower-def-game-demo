@@ -13,6 +13,10 @@ public:
     SplashCasterFriend(int blockNum, int cost, double healthLimit, double atk, double def,
                        double atkInterval, const QString &appearFileName, const QString &msFileName,
                        QGraphicsRectItem *parent = nullptr);
+    void attack(QGraphicsItem *target) override;
+private:
+    QTimer* imageTimer;
+    QGraphicsPixmapItem* image;
 };
 
 

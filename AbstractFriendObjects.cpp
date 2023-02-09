@@ -16,24 +16,17 @@ AbstractFriendObjects::AbstractFriendObjects(int blockNum_, int cost_, double he
                                              double atk_, double def_,
                                              double atkInterval_, QString appearFileName,
                                              QString MSFileName,
-                                             QGraphicsRectItem *parent) : QGraphicsRectItem(parent),
-                                                                          healthLimit(healthLimit_),
-                                                                          health(healthLimit_),
-                                                                          atk(atk_), def(def_),
-                                                                          atkInterval(atkInterval_),
-                                                                          blockNum(blockNum_),
-                                                                          cost(cost_),
-                                                                          appearanceFileName(
-                                                                                  std::move(
-                                                                                          appearFileName)),
-                                                                          MugShotFileName(
-                                                                                  std::move(
-                                                                                          MSFileName)) {
+                                             QGraphicsRectItem *parent)
+        : QGraphicsRectItem(parent), healthLimit(healthLimit_), health(healthLimit_),
+          atk(atk_), def(def_), atkInterval(atkInterval_/2.0), blockNum(blockNum_),
+          cost(cost_), appearanceFileName(std::move(appearFileName)),
+          MugShotFileName(std::move(MSFileName)),hpBar(nullptr),hpFullBar(nullptr),mode(MugShot) {
     //初始化图片
     appearance = new QGraphicsPixmapItem(this);
     setAppearance(MugShot);
     //设置碰撞箱大小
     setRect(0, 0, game->gridSizeX, game->gridSizeY);
+
 
     readyToAttack = true;
 
@@ -42,7 +35,9 @@ AbstractFriendObjects::AbstractFriendObjects(int blockNum_, int cost_, double he
 void AbstractFriendObjects::setAppearance(appearanceMode a) {
     if (a == MugShot) {
         QPixmap look = QPixmap{MugShotFileName}.scaledToHeight(game->gridSizeY);
+        setPen(QPen(Qt::SolidLine));
         appearance->setPixmap(look);
+        appearance->setOffset(0, 0);
         mode = MugShot;
     } else if (a == Fight) {
         QPixmap look = QPixmap{appearanceFileName}.scaledToHeight(game->gridSizeY * 1.2);
@@ -77,13 +72,20 @@ void AbstractFriendObjects::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         game->gameStatus = GameControl::build;
         if (getType() == Defender || getType() == Vanguard) game->setGroundGridGreen(true);
         else game->setAirGridGreen(true);
+    } else if (game->gameStatus == GameControl::normal && mode == Fight) {
+        game->gameStatus = GameControl::showDetail;
+        attackArea->setBrush(QBrush(QColor(Qt::blue), Qt::CrossPattern));
+        attackArea->setOpacity(20);
+        tick = new Tick(this);
+        cross = new Cross(this);
+        scene()->addItem(tick);
+        scene()->addItem(cross);
     }
 }
 
 void AbstractFriendObjects::intoFight(QPointF position) {
     setPos(position);
     setAppearance(Fight);
-    location = position;
     showPointer();
 }
 
@@ -126,11 +128,9 @@ void AbstractFriendObjects::setDir(directions dir) {
         attackArea->setPos(game->gridSizeX, 0);
         attackArea->setPen(QPen(Qt::NoPen));
     }
+
+    initHpBar();
     game->gameStatus = GameControl::normal;
-    hpBar = new QGraphicsRectItem(this);
-    setRect(10, game->gridSizeY - 20, health / healthLimit * (game->gridSizeX - 20), 10);
-    hpBar->setBrush(QBrush(Qt::red, Qt::SolidPattern));
-    hpBar->setZValue(10);
     connect(&friendTimer, SIGNAL(timeout()), this, SLOT(acquireTarget()));
     friendTimer.start(20);
 }
@@ -147,34 +147,90 @@ AbstractFriendObjects::friendType AbstractFriendObjects::intToFriendType(int typ
             return AbstractFriendObjects::Vanguard;
         case 5:
             return AbstractFriendObjects::SplashCaster;
+        default:
+            return null;
     }
-    return null;
 }
 
 void AbstractFriendObjects::acquireTarget() {
-    QList<QGraphicsItem *> collidingItemList = attackArea->collidingItems();
     bool hasTarget = false;
+    if (blockList.size() < blockNum) {
+        QList<QGraphicsItem *> collidingItemList = this->collidingItems();
+        for (auto i: collidingItemList) {
+            auto *enemy = dynamic_cast<AbstractEnemy *>(i);
+            if (enemy && !enemy->getBlocked()) {
+                blockList.append(enemy);
+                enemy->blocked(this);
+                connect(enemy, &AbstractEnemy::dieSignal, [&, enemy]() {
+                    for (int i = 0; i < blockList.size(); i++)
+                        if (blockList.at(i) == enemy)blockList.removeAt(i);
+                });
+            }
+        }
+    }
+    QList<QGraphicsItem *> collidingItemList = attackArea->collidingItems();
     double closestDist = 10000;
     AbstractEnemy *target;
     for (auto i: collidingItemList) {
-        AbstractEnemy *enemy = dynamic_cast<AbstractEnemy *>(i);
+        auto *enemy = dynamic_cast<AbstractEnemy *>(i);
         if (enemy && enemy->distanceLeft() <= closestDist) {
             target = enemy;
             closestDist = enemy->distanceLeft();
             hasTarget = true;
         }
     }
-    if (hasTarget&&readyToAttack){
+    if (hasTarget && readyToAttack) {
         attackTimer.stop();
         attack(target);
-        attackTimer.start(atkInterval);
+        attackTimer.start((int) atkInterval);
         readyToAttack = false;
-        connect(&attackTimer, &QTimer::timeout,[this](){readyToAttack = true;});
+        connect(&attackTimer, &QTimer::timeout, [this]() { readyToAttack = true; });
     }
 }
 
 void AbstractFriendObjects::attack(QGraphicsItem *target0) {
-        AbstractEnemy *target = dynamic_cast<AbstractEnemy *>(target0);
-        target->beAttacked(atk);
+    auto *target = dynamic_cast<AbstractEnemy *>(target0);
+    target->beAttacked(atk);
+}
+
+void AbstractFriendObjects::setHpBar() {
+    hpBar->setRect(10, game->gridSizeY - 20, health / healthLimit * (game->gridSizeX - 20), 10);
+}
+
+void AbstractFriendObjects::initHpBar() {
+    hpFullBar = new QGraphicsRectItem(this);
+    hpFullBar->setZValue(10);
+    hpFullBar->setRect(10, game->gridSizeY - 20, health / healthLimit * (game->gridSizeX - 20), 10);
+    hpBar = new QGraphicsRectItem(this);
+    hpBar->setZValue(10);
+    setHpBar();
+    QBrush hpBrush(Qt::red, Qt::SolidPattern);
+    hpBar->setBrush(hpBrush);
+}
+
+void AbstractFriendObjects::beAttacked(double damage) {
+    double realDamage = damage - def;
+    if (realDamage < damage * 0.05) realDamage = damage * 0.05;
+    health = health - realDamage;
+    setHpBar();
+    if (health <= 0) die();
+}
+
+void AbstractFriendObjects::die() {
+//    emit dieSignal();
+    for (auto i: blockList) i->free();
+    setAppearance(MugShot);
+    setPos(location);
+    health = healthLimit;
+    delete hpBar;
+    delete hpFullBar;
+    friendTimer.stop();
+    attackTimer.stop();
+}
+
+void AbstractFriendObjects::beHealed(double damage) {
+    health = health+damage;
+    if(health>healthLimit) health = healthLimit;
+    setHpBar();
 }
 

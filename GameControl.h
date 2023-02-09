@@ -11,6 +11,7 @@
 #include "AbstractFriendObjects.h"
 
 #include "Pointer.h"
+#include "ScoreBoard.h"
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -20,10 +21,12 @@
 #include <QPointF>
 #include <QTimer>
 #include <QMouseEvent>
-
+#include <QLabel>
 
 class GameControl : public QGraphicsView {
 Q_OBJECT
+
+
 
 
 public:
@@ -45,6 +48,11 @@ public:
     QList<AbstractFriendObjects *> friendList;
     QList<AbstractGrid *> gridList;
     Pointer *pointers;
+    ScoreBoard *scoreBoard;
+
+    int enemySum() { return enemyTotalNum; }
+    int mapHealth() {return mapHp;}
+    void gameOver(bool ifVictory);
 
 private:
     QGraphicsScene *scene;
@@ -55,7 +63,9 @@ private:
     int marginUp;
     int viewWidth;
     int viewHeight;
+    int mapHp;
     QList<GridAttr *> *gridAttrList;
+    QList<QGraphicsItem*> *item;
 
     //friendObject related
     int friendTotalNum;
@@ -65,13 +75,6 @@ private:
     int enemyTotalNum;
     QList<enemyBasicAttr *> *enemyAttrList;
     int curBirthEnemy;
-
-    //read info
-//    void readMapInfo(const QString &mapName);
-
-//    void readEnemyInfo(const QString &mapName);
-
-    void readFriendInfo(const QString &mapName);
 
     void readInfo(const QString &mapName);
 

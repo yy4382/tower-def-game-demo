@@ -1,30 +1,38 @@
 <RCC>
     <qresource prefix="/">
+        <file>images/AdnachielFight.png</file>
+        <file>images/AdnachielMG.png</file>
         <file>images/DeployableAirGrid1.png</file>
+        <file>images/DeployableAirGridGreen.png</file>
         <file>images/DeployableBlueGateGrid1.png</file>
         <file>images/DeployableGroundGrid1.png</file>
+        <file>images/DeployableGroundGridGreen.png</file>
         <file>images/DeployableRedGateGrid1.png</file>
-        <file>images/UndeployableAirGrid1.png</file>
-        <file>images/UndeployableGroundGrid1.png</file>
-        <file>images/pauseBtn.png</file>
-        <file>images/enemyDemo1.png</file>
-        <file>images/enemyDemo2.png</file>
-        <file>.gitignore</file>
-        <file>images/fengFight.png</file>
-        <file>images/fengMG.png</file>
         <file>images/KroosFight.png</file>
         <file>images/KroosMG.png</file>
         <file>images/LavaFight.png</file>
-        <file>images/AdnachielFight.png</file>
-        <file>images/AdnachielMG.png</file>
+        <file>images/LavaMG.png</file>
+        <file>images/UndeployableAirGrid1.png</file>
+        <file>images/UndeployableGroundGrid1.png</file>
         <file>images/anselFight.png</file>
         <file>images/anselMG.png</file>
         <file>images/bandianFight.png</file>
         <file>images/bandianMG.png</file>
-        <file>images/LavaMG.png</file>
-        <file>images/DeployableAirGridGreen.png</file>
-        <file>images/DeployableGroundGridGreen.png</file>
+        <file>images/bullet.png</file>
+        <file>images/bulletHeal.png</file>
+        <file>images/cross.png</file>
+        <file>images/enemy/CocktailThrower.png</file>
+        <file>images/enemy/OriginiumSlugA.png</file>
+        <file>images/enemy/Rioter.png</file>
+        <file>images/enemy/ShieldedSoldier.png</file>
+        <file>images/enemy/Soldier.png</file>
+        <file>images/explosion.png</file>
+        <file>images/fengFight.png</file>
+        <file>images/fengMG.png</file>
+        <file>images/pauseBtn.png</file>
         <file>images/pointer.png</file>
+        <file>images/tick.png</file>
+        <file>images/enemy/Junkman.png</file>
     </qresource>
     <qresource prefix="/mapInfo">
         <file>resources/testMap.txt</file>

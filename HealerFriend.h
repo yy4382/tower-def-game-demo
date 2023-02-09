@@ -7,11 +7,15 @@
 #include "AbstractFriendObjects.h"
 class HealerFriend: public AbstractFriendObjects{
 public:
-    virtual friendType getType() { return Healer; }
+    friendType getType() override { return Healer; }
 
     HealerFriend(int blockNum, int cost, double healthLimit, double atk, double def,
                  double atkInterval, const QString &appearFileName, const QString &msFileName,
                  QGraphicsRectItem *parent = nullptr);
+protected:
+    void attack(QGraphicsItem *target) override;
+public slots:
+    void acquireTarget() override;
 };
 
 

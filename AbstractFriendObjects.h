@@ -16,10 +16,14 @@
 #include <QPolygonF>
 #include <utility>
 #include <QTimer>
-
+#include "AbstractEnemy.h"
+#include "Tick.h"
+#include "Cross.h"
 
 class AbstractFriendObjects : public QObject, public QGraphicsRectItem {
 Q_OBJECT
+
+
 public:
     enum friendType {
         null = 0, Shooter, Defender, Healer, Vanguard, SplashCaster
@@ -30,6 +34,7 @@ public:
     enum directions {
         right, left, up, down
     };
+
 
     AbstractFriendObjects(int blockNum_, int cost_, double healthLimit_, double atk_, double def_,
                           double atkInterval_, QString appearFileName, QString MSFileName,
@@ -43,36 +48,65 @@ public:
 
     static friendType intToFriendType(int type);
 
+    virtual void beAttacked(double damage);
+
+//    double posX;
+    QPointF location;
+
+    QGraphicsPolygonItem *getAttackArea() { return attackArea; }
+
+    Tick *tick{};
+    Cross *cross{};
+
+    virtual void die();
+    double getHealthPercent(){return health/healthLimit;}
+    appearanceMode getMode(){return mode;}
+    void beHealed(double damage);
 
 private:
-    int blockNum, cost;
-    double health, healthLimit, atk, def, atkInterval;
-    QPointF location;
-    QPoint gridLocation;
+
+
     QGraphicsPixmapItem *appearance;
     QString appearanceFileName; //战斗照文件名
     QString MugShotFileName;    //大头照文件名
-    QGraphicsPolygonItem *attackArea;
+
     appearanceMode mode;
-    QGraphicsRectItem *hpBar;
-    bool readyToAttack;
+    QGraphicsRectItem *hpBar{};
+    QGraphicsRectItem *hpFullBar{};
+
+    void initHpBar();
+
     void setHpBar();
 
 
-
 protected:
+    const int blockNum, cost;
+    const double healthLimit, atk, def, atkInterval;
+    double health;
+
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
     void showPointer();
 
     void setAppearance(appearanceMode);
-    QVector<QPointF> *attackAreaAttr;
-    virtual void attack(QGraphicsItem* target);
+
+    QVector<QPointF> *attackAreaAttr{};
+
+    virtual void attack(QGraphicsItem *target);
+
     QTimer friendTimer;
     QTimer attackTimer;
+    QList<AbstractEnemy *> blockList;
+    QGraphicsPolygonItem *attackArea{};
 
+    bool readyToAttack;
 public slots:
+
     virtual void acquireTarget();
+
+signals:
+
+    void dieSignal();
 
 };
 

@@ -14,6 +14,7 @@ public:
     ShooterFriend(int blockNum, int cost, double healthLimit, double atk, double def,
                   double atkInterval, const QString &appearanceFileName,
                   const QString &msFileName, QGraphicsRectItem *parent = nullptr);
+    void attack(QGraphicsItem *target) override;
 };
 
 

@@ -38,33 +38,62 @@ struct enemyBasicAttr {
 
 class AbstractEnemy : public QObject, public QGraphicsRectItem {
 Q_OBJECT
+private:
+    enum dieType {
+        hp_0, arriveAtDest
+    };
 public:
     explicit AbstractEnemy(const enemyBasicAttr &);
 
     double distanceLeft();
+
     void beAttacked(double damage);
-protected:
+
+    void blocked(QGraphicsRectItem *friendObj);;
+
+    void free() {
+        enemyMoveTimer->start(20);
+        isBlocked = nullptr;
+        enemyAttackTimer.stop();
+    }
+
+    bool getBlocked() { return (bool) isBlocked; };
+
     QGraphicsPixmapItem *appearance;
+
+    void die(dieType);
+    void beHealed(double damage);
+
+signals:
+    void dieSignal();
+
+protected:
+
     QString appearanceFileName;
 private:
-    enum dieType{hp_0,arriveAtDest};
     QList<QPointF> path;
     int pathIndex; //to which point in the path the enemy is approaching
-    double healthLimit, health, atk, def, speed;
+    double healthLimit, health, atk, def, speed, atkInterval;
     bool isFlyingObject;
     QGraphicsRectItem *hpBar;
     QGraphicsRectItem *hpFullBar;
+    QGraphicsRectItem *isBlocked;
+
+    void initHpBar();
+
     void setHpBar();
 
-    void die(dieType);
 
     QTimer *enemyMoveTimer;
+    QTimer enemyAttackTimer;
 
     void setAppearance(bool ifFlipped);
 
 public slots:
 
     void move();
+
+    void attack();
 };
 
 

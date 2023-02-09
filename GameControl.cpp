@@ -19,7 +19,6 @@
 
 GameControl::GameControl() : curBirthEnemy(0) {
     readInfo(":/mapInfo/resources/testMap.txt");
-//    readFriendInfo("testMap");
 
     //set view rect
     setFixedSize(viewWidth, viewHeight);
@@ -42,6 +41,10 @@ GameControl::GameControl() : curBirthEnemy(0) {
     friendInit->setSingleShot(true);
     connect(friendInit, SIGNAL(timeout()), this, SLOT(initFriend()));
     friendInit->start(10);
+    connect(friendInit, &QTimer::timeout, [this]() {
+        scoreBoard = new ScoreBoard;
+        scene->addItem(scoreBoard);
+    });
 }
 
 void GameControl::initBackground() {
@@ -100,44 +103,6 @@ QPointF GameControl::indexToCoordinate(int x, int y) const {
 }
 
 
-void GameControl::readFriendInfo(const QString &mapName) {
-    friendTotalNum = 6;
-    friendAttrList = new QList<AbstractFriendAttr *>();
-
-    //过渡代码， readFriendInfo 从文件读入
-    AbstractFriendAttr *a[friendTotalNum];
-
-    a[0] = new AbstractFriendAttr{1, 27, 878, 453, 69,
-                                  2900, "://images/LavaFight.png",
-                                  "://images/LavaMG.png",
-                                  AbstractFriendObjects::SplashCaster};
-    a[1] = new AbstractFriendAttr{1, 9, 831, 251, 93,
-                                  1000, "://images/KroosFight.png",
-                                  "://images/KroosMG.png",
-                                  AbstractFriendObjects::Shooter};
-    a[2] = new AbstractFriendAttr{1, 9, 831, 251, 93,
-                                  1000, "://images/AdnachielFight.png",
-                                  "://images/AdnachielMG.png",
-                                  AbstractFriendObjects::Shooter};
-    a[3] = new AbstractFriendAttr{2, 9, 1060, 235, 187,
-                                  1050, "://images/fengFight.png",
-                                  "://images/fengMG.png",
-                                  AbstractFriendObjects::Vanguard};
-    a[4] = new AbstractFriendAttr{3, 15, 1429, 236, 331,
-                                  1200, "://images/bandianFight.png",
-                                  "://images/bandianMG.png",
-                                  AbstractFriendObjects::Defender};
-    a[5] = new AbstractFriendAttr{1, 15, 907, 257, 81,
-                                  2850, "://images/anselFight.png",
-                                  "://images/anselMG.png",
-                                  AbstractFriendObjects::Healer};
-    for (int i = 0; i < friendTotalNum; i++) *friendAttrList << a[i];
-    std::sort(friendAttrList->begin(), friendAttrList->end(),
-              [](const AbstractFriendAttr *a, const AbstractFriendAttr *b) -> bool {
-                  return a->cost > b->cost;
-              });
-}
-
 void GameControl::initEnemy() {
     for (auto i: *enemyAttrList) {
         auto birthTimer = new QTimer();
@@ -149,6 +114,7 @@ void GameControl::initEnemy() {
 
 void GameControl::newEnemy() {
     auto enemy = new AbstractEnemy(*(enemyAttrList->at(curBirthEnemy)));
+    enemyList.append(enemy);
     scene->addItem(enemy);
     curBirthEnemy++;
 }
@@ -207,6 +173,7 @@ void GameControl::initFriend() {
                 break;
         }
         friendObj->setPos(posX, viewHeight - gridSizeY);
+        friendObj->location = QPointF(posX,viewHeight - gridSizeY);
         posX -= gridSizeX;
         scene->addItem(friendObj);
     }
@@ -234,8 +201,6 @@ void GameControl::mousePressEvent(QMouseEvent *event) {
                     break;
                 }
         }
-    } else if (gameStatus == selectDir) {
-
     }
     QGraphicsView::mousePressEvent(event);
 }
@@ -293,6 +258,9 @@ void GameControl::readInfo(const QString &mapName) {
     listRead = byteArrayRead.split(' ');
     rowX = listRead[0].trimmed().toInt();
     rowY = listRead[1].trimmed().toInt();
+
+    byteArrayRead = qFile.readLine();
+    mapHp = byteArrayRead.toInt();
 
     //读取格子种类
     auto gridAttrType = new QList<GridAttr *>;
@@ -358,7 +326,7 @@ void GameControl::readInfo(const QString &mapName) {
 
     //敌人种类
     struct enemyTypeAttr {
-        double healthLimit{}, atk{}, def{}, speed{};
+        double healthLimit{}, atk{}, def{}, speed{},atkInterval{};
         bool fly{};
         QString appearance;
     };
@@ -424,5 +392,18 @@ void GameControl::readInfo(const QString &mapName) {
         if (byteArrayRead.trimmed() == "#endFriend") break;
         listRead = byteArrayRead.split(' ');
     }
+}
+
+void GameControl::gameOver(bool ifVictory) {
+    item = new QList<QGraphicsItem *>;
+    *item = scene->items();
+    for (auto i: scene->items()) scene->removeItem(i);
+    for (auto i: friendList)delete i;
+    auto *word = new QGraphicsTextItem;
+    if (ifVictory)
+        word->setPlainText("Victory");
+    else word->setPlainText("Failed");
+    word->setFont(QFont("times", 30));
+    scene->addItem(word);
 }
 
