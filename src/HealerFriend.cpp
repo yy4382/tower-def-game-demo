@@ -33,7 +33,6 @@ void HealerFriend::acquireTarget() {
         for (auto i: collidingItemList) {
             auto *enemy = dynamic_cast<AbstractEnemy *>(i);
             if (enemy && !enemy->getBlocked()) {
-                qDebug() << "block";
                 blockList.append(enemy);
                 enemy->blocked(this);
                 connect(enemy, &AbstractEnemy::dieSignal, [&, enemy]() {
@@ -49,7 +48,7 @@ void HealerFriend::acquireTarget() {
     for (auto i: collidingItemList) {
         auto *fTarget = dynamic_cast<AbstractFriendObjects *>(i);
         if (fTarget && fTarget->getMode() ==AbstractFriendObjects::Fight &&
-            fTarget->getHealthPercent() <= healthPercent) {
+            fTarget->getHealthPercent() < healthPercent) {
             target = fTarget;
             healthPercent = fTarget->getHealthPercent();
             hasTarget = true;

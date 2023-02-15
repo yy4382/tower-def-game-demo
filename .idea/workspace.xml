@@ -17,34 +17,63 @@
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2f0e6a5-992a-4a28-8c0b-ba6f80908a5c" name="变更" comment="添加了我方单位及其摆放">
-      <change afterPath="$PROJECT_DIR$/Pointer.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pointer.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/pointer.png" afterDir="false" />
+    <list default="true" id="f2f0e6a5-992a-4a28-8c0b-ba6f80908a5c" name="变更" comment="重写了我方射手、群体术士、奶妈的攻击&#10;增加了关卡生命系统&#10;增加了阻挡系统和敌人的攻击&#10;我方单位可以死亡了">
+      <change afterPath="$PROJECT_DIR$/src/CostBoard.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/CostBoard.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AbstractEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/AbstractEnemy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AbstractEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/AbstractEnemy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AbstractFriendObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/AbstractFriendObjects.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AbstractFriendObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/AbstractFriendObjects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/AbstractEnemy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/AbstractEnemy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractFriendObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/AbstractFriendObjects.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractFriendObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/AbstractFriendObjects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractGrid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/AbstractGrid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractGrid.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/AbstractGrid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AirGrid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/AirGrid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AirGrid.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/AirGrid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bullet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bullet.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DefenderFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DefenderFriend.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DefenderFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/DefenderFriend.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameControl.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameControl.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameControl.h" beforeDir="false" afterPath="$PROJECT_DIR$/GameControl.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealerFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/HealerFriend.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealerFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/HealerFriend.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ShooterFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ShooterFriend.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ShooterFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/ShooterFriend.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SplashCasterFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SplashCasterFriend.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SplashCasterFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/SplashCasterFriend.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VanguardFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/VanguardFriend.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VanguardFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/VanguardFriend.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cross.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cross.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cross.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cross.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DefenderFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/DefenderFriend.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DefenderFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/DefenderFriend.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameControl.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameControl.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameControl.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameControl.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GateGrid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GateGrid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GateGrid.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GateGrid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GroundGrid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroundGrid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GroundGrid.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroundGrid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealerFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/HealerFriend.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealerFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/HealerFriend.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pointer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pointer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pointer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pointer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScoreBoard.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScoreBoard.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScoreBoard.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScoreBoard.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ShooterFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShooterFriend.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ShooterFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShooterFriend.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SplashCasterFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/SplashCasterFriend.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SplashCasterFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SplashCasterFriend.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tick.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tick.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tick.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tick.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VanguardFriend.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/VanguardFriend.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VanguardFriend.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/VanguardFriend.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/AdnachielMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/AdnachielMG.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/KroosMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/KroosMG.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/LavaMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/LavaMG.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/anselMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/anselMG.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/bandianMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/bandianMG.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/cross.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/cross.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/fengMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/fengMG.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/pauseBtn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/tick.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/tick.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res.qrc" beforeDir="false" afterPath="$PROJECT_DIR$/res.qrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testMap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/testMap.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/testMap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/testMap.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,29 +106,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "D:/Projects/Clion/qt/TowerDef",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
-    "structure.view.defaults.are.configured": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Projects/Clion/qt/Snake&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Projects\Clion\qt\TowerDef" />
+      <recent name="D:\Projects\Clion\qt\TowerDef\src" />
       <recent name="D:\Projects\Clion\qt\TowerDef\resources" />
       <recent name="D:\Projects\Clion\qt\TowerDef\docs" />
     </key>
@@ -143,6 +174,17 @@
       <workItem from="1675666739300" duration="526000" />
       <workItem from="1675667278960" duration="14855000" />
       <workItem from="1675685869039" duration="14438000" />
+      <workItem from="1675733665466" duration="16031000" />
+      <workItem from="1675857529448" duration="16051000" />
+      <workItem from="1675912800233" duration="1344000" />
+      <workItem from="1675931643146" duration="542000" />
+      <workItem from="1675932668439" duration="2276000" />
+      <workItem from="1675937761242" duration="301000" />
+      <workItem from="1675948136098" duration="11703000" />
+      <workItem from="1675960169727" duration="202000" />
+      <workItem from="1676288415670" duration="147000" />
+      <workItem from="1676462824829" duration="568000" />
+      <workItem from="1676465358678" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="first commit, including grid initializing and enemy generating and moving">
       <created>1674147054453</created>
@@ -179,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675516594908</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="重写了我方射手、群体术士、奶妈的攻击&#10;增加了关卡生命系统&#10;增加了阻挡系统和敌人的攻击&#10;我方单位可以死亡了">
+      <created>1675914185059</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1675914185059</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,7 +257,8 @@
     <MESSAGE value="update .gitignore" />
     <MESSAGE value="update" />
     <MESSAGE value="添加了我方单位及其摆放" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加了我方单位及其摆放" />
+    <MESSAGE value="重写了我方射手、群体术士、奶妈的攻击&#10;增加了关卡生命系统&#10;增加了阻挡系统和敌人的攻击&#10;我方单位可以死亡了" />
+    <option name="LAST_COMMIT_MESSAGE" value="重写了我方射手、群体术士、奶妈的攻击&#10;增加了关卡生命系统&#10;增加了阻挡系统和敌人的攻击&#10;我方单位可以死亡了" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

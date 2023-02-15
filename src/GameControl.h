@@ -12,6 +12,7 @@
 
 #include "Pointer.h"
 #include "ScoreBoard.h"
+#include "CostBoard.h"
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -27,8 +28,6 @@ class GameControl : public QGraphicsView {
 Q_OBJECT
 
 
-
-
 public:
     GameControl();
 
@@ -36,8 +35,8 @@ public:
         normal, build, selectDir, showDetail, success
     };
     GameStatus gameStatus;
-    int gridSizeX;
-    int gridSizeY;
+    int gridSizeX{};
+    int gridSizeY{};
     AbstractFriendObjects *cursor;
 
     void setGroundGridGreen(bool g);
@@ -47,33 +46,40 @@ public:
     QList<AbstractEnemy *> enemyList;
     QList<AbstractFriendObjects *> friendList;
     QList<AbstractGrid *> gridList;
-    Pointer *pointers;
+    Pointer *pointers{};
     ScoreBoard *scoreBoard;
+    CostBoard *costBoard;
+    QGraphicsTextItem* warning;
 
-    int enemySum() { return enemyTotalNum; }
-    int mapHealth() {return mapHp;}
+    int enemySum() const { return enemyTotalNum; }
+
+    int mapHealth() const { return mapHp; }
+
     void gameOver(bool ifVictory);
+
+    double mapDownSideY() const { return marginUp + rowY * gridSizeY; }
 
 private:
     QGraphicsScene *scene;
     //map related
-    int rowX;
-    int rowY;
-    int marginLeftAndRight;
-    int marginUp;
-    int viewWidth;
-    int viewHeight;
-    int mapHp;
-    QList<GridAttr *> *gridAttrList;
-    QList<QGraphicsItem*> *item;
+    int rowX{};
+    int rowY{};
+    int marginLeftAndRight{};
+    int marginUp{};
+    int viewHeight{};
+    int viewWidth{};
+    int mapHp{};
+    int initCost{};
+    QList<GridAttr *> *gridAttrList{};
+    QList<QGraphicsItem *> *item{};
 
     //friendObject related
-    int friendTotalNum;
-    QList<AbstractFriendAttr *> *friendAttrList;
+    int friendTotalNum{};
+    QList<AbstractFriendAttr *> *friendAttrList{};
 
     //enemy related
-    int enemyTotalNum;
-    QList<enemyBasicAttr *> *enemyAttrList;
+    int enemyTotalNum{};
+    QList<enemyBasicAttr *> *enemyAttrList{};
     int curBirthEnemy;
 
     void readInfo(const QString &mapName);
@@ -84,6 +90,7 @@ private:
     void initBackground();
 
     void initEnemy();
+    QList<QTimer*> birthTimers;
 
 
 public slots:

@@ -22,6 +22,7 @@
         <file>images/bulletHeal.png</file>
         <file>images/cross.png</file>
         <file>images/enemy/CocktailThrower.png</file>
+        <file>images/enemy/Junkman.png</file>
         <file>images/enemy/OriginiumSlugA.png</file>
         <file>images/enemy/Rioter.png</file>
         <file>images/enemy/ShieldedSoldier.png</file>
@@ -29,10 +30,8 @@
         <file>images/explosion.png</file>
         <file>images/fengFight.png</file>
         <file>images/fengMG.png</file>
-        <file>images/pauseBtn.png</file>
         <file>images/pointer.png</file>
         <file>images/tick.png</file>
-        <file>images/enemy/Junkman.png</file>
     </qresource>
     <qresource prefix="/mapInfo">
         <file>resources/testMap.txt</file>

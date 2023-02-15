@@ -15,12 +15,12 @@ find_package(Qt5 COMPONENTS
         REQUIRED)
 
 add_executable(TowerDef
-        main.cpp
-        GameControl.cpp GameControl.h
-        AbstractGrid.cpp AbstractGrid.h
-        GroundGrid.cpp GroundGrid.h
+        src/main.cpp
+        src/GameControl.cpp src/GameControl.h
+        src/AbstractGrid.cpp src/AbstractGrid.h
+        src/GroundGrid.cpp src/GroundGrid.h
         res.qrc
-        AirGrid.cpp AirGrid.h GateGrid.cpp GateGrid.h AbstractEnemy.cpp AbstractEnemy.h AbstractFriendObjects.cpp AbstractFriendObjects.h DefenderFriend.cpp DefenderFriend.h ShooterFriend.cpp ShooterFriend.h VanguardFriend.cpp VanguardFriend.h HealerFriend.cpp HealerFriend.h SplashCasterFriend.cpp SplashCasterFriend.h Pointer.cpp Pointer.h Bullet.cpp Bullet.h ScoreBoard.cpp ScoreBoard.h Tick.cpp Tick.h Cross.cpp Cross.h)
+        src/AirGrid.cpp src/AirGrid.h src/GateGrid.cpp src/GateGrid.h src/AbstractEnemy.cpp src/AbstractEnemy.h src/AbstractFriendObjects.cpp src/AbstractFriendObjects.h src/DefenderFriend.cpp src/DefenderFriend.h src/ShooterFriend.cpp src/ShooterFriend.h src/VanguardFriend.cpp src/VanguardFriend.h src/HealerFriend.cpp src/HealerFriend.h src/SplashCasterFriend.cpp src/SplashCasterFriend.h src/Pointer.cpp src/Pointer.h src/Bullet.cpp src/Bullet.h src/ScoreBoard.cpp src/ScoreBoard.h src/Tick.cpp src/Tick.h src/Cross.cpp src/Cross.h src/CostBoard.cpp src/CostBoard.h)
 target_link_libraries(TowerDef
         Qt5::Core
         Qt5::Gui

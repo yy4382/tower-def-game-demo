@@ -18,9 +18,10 @@
 #include <QBitArray>
 
 GameControl::GameControl() : curBirthEnemy(0) {
+    //从文件中读取
     readInfo(":/mapInfo/resources/testMap.txt");
 
-    //set view rect
+    // 设置view
     setFixedSize(viewWidth, viewHeight);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -30,11 +31,12 @@ GameControl::GameControl() : curBirthEnemy(0) {
     scene->setSceneRect(0, 0, viewWidth, viewHeight);
     setScene(scene);
 
-    //mouse event
+    // initial mouse events
     setMouseTracking(true);
     cursor = nullptr;
     gameStatus = normal;
 
+    // 初始化背景格子、敌人、友方单位、记分牌和cost计算器
     initBackground();
     initEnemy();
     auto friendInit = new QTimer();
@@ -44,7 +46,16 @@ GameControl::GameControl() : curBirthEnemy(0) {
     connect(friendInit, &QTimer::timeout, [this]() {
         scoreBoard = new ScoreBoard;
         scene->addItem(scoreBoard);
+        costBoard = new CostBoard(initCost);
+        scene->addItem(costBoard);
+        costBoard->setPos(scene->width() - 250, 0);
     });
+
+    // 初始化warning
+    warning = new QGraphicsTextItem;
+    warning->setPos(0, marginUp + gridSizeY * rowY + 20);
+    warning->setFont(QFont("Segoe UI", 25));
+    warning->setDefaultTextColor(Qt::red);
 }
 
 void GameControl::initBackground() {
@@ -85,13 +96,6 @@ void GameControl::initBackground() {
         x = 0;
     }
 
-    //init pause btn
-    auto *pauseBtn = new QGraphicsPixmapItem(
-            QPixmap("://images/pauseBtn.png").scaled(marginUp - 10, marginUp - 10));
-    scene->addItem(pauseBtn);
-    pauseBtn->setPos(QPointF(viewWidth - marginUp - 15, 5));
-
-
 }
 
 
@@ -106,6 +110,7 @@ QPointF GameControl::indexToCoordinate(int x, int y) const {
 void GameControl::initEnemy() {
     for (auto i: *enemyAttrList) {
         auto birthTimer = new QTimer();
+        birthTimers.append(birthTimer);
         birthTimer->setSingleShot(true);
         connect(birthTimer, SIGNAL(timeout()), this, SLOT(newEnemy()));
         birthTimer->start(i->birthTime);
@@ -173,7 +178,7 @@ void GameControl::initFriend() {
                 break;
         }
         friendObj->setPos(posX, viewHeight - gridSizeY);
-        friendObj->location = QPointF(posX,viewHeight - gridSizeY);
+        friendObj->location = QPointF(posX, viewHeight - gridSizeY);
         posX -= gridSizeX;
         scene->addItem(friendObj);
     }
@@ -260,7 +265,9 @@ void GameControl::readInfo(const QString &mapName) {
     rowY = listRead[1].trimmed().toInt();
 
     byteArrayRead = qFile.readLine();
-    mapHp = byteArrayRead.toInt();
+    listRead = byteArrayRead.split(' ');
+    mapHp = listRead[0].trimmed().toInt();
+    initCost = listRead[1].trimmed().toInt();
 
     //读取格子种类
     auto gridAttrType = new QList<GridAttr *>;
@@ -293,6 +300,7 @@ void GameControl::readInfo(const QString &mapName) {
         byteArrayRead = qFile.readLine();
         if (byteArrayRead.trimmed() == "#endGridAttr") break;
     }
+
     //读取格子位置信息
     gridAttrList = new QList<GridAttr *>;
     byteArrayRead = qFile.readLine();
@@ -326,7 +334,7 @@ void GameControl::readInfo(const QString &mapName) {
 
     //敌人种类
     struct enemyTypeAttr {
-        double healthLimit{}, atk{}, def{}, speed{},atkInterval{};
+        double healthLimit{}, atk{}, def{}, speed{}, atkInterval{};
         bool fly{};
         QString appearance;
     };
@@ -392,18 +400,24 @@ void GameControl::readInfo(const QString &mapName) {
         if (byteArrayRead.trimmed() == "#endFriend") break;
         listRead = byteArrayRead.split(' ');
     }
+    std::sort(friendAttrList->begin(), friendAttrList->end(),
+              [](const AbstractFriendAttr *a, const AbstractFriendAttr *b) -> bool {
+                  return a->cost > b->cost;
+              });
 }
 
 void GameControl::gameOver(bool ifVictory) {
-    item = new QList<QGraphicsItem *>;
-    *item = scene->items();
     for (auto i: scene->items()) scene->removeItem(i);
     for (auto i: friendList)delete i;
+    for (auto i: birthTimers) delete i;
+    for (auto i: enemyList) delete i;
+    item = new QList<QGraphicsItem *>;
+    *item = scene->items();
     auto *word = new QGraphicsTextItem;
     if (ifVictory)
         word->setPlainText("Victory");
     else word->setPlainText("Failed");
-    word->setFont(QFont("times", 30));
+    word->setFont(QFont("times", 80));
     scene->addItem(word);
 }
 

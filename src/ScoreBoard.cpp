@@ -10,7 +10,7 @@ extern GameControl *game;
 ScoreBoard::ScoreBoard() : currentKill(0), hpLeft(game->mapHealth()) {
     setPlainText(QString("Score: 0/") + QString::number(game->enemySum()) + " Health: " +
                  QString::number(hpLeft) + QString("/") + QString::number(hpLeft));
-    setFont(QFont("times", 18));
+    setFont(QFont("times", 28));
 }
 
 void ScoreBoard::hpMinus() {

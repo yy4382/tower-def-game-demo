@@ -21,7 +21,6 @@ SplashCasterFriend::SplashCasterFriend(int blockNum, int cost, double healthLimi
 }
 
 void SplashCasterFriend::attack(QGraphicsItem *target) {
-    qDebug()<<"attack";
     auto area = new QGraphicsEllipseItem;
     scene()->addItem(area);
     area->setPen(QPen(Qt::NoPen));

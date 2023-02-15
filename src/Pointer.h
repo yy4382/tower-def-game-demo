@@ -7,7 +7,6 @@
 
 #include "AbstractFriendObjects.h"
 #include <QGraphicsPixmapItem>
-#include <QDebug>
 
 class Pointer : public QObject, public QGraphicsPixmapItem{
 public:

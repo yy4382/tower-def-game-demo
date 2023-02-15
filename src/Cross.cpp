@@ -11,7 +11,7 @@ void Cross::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     friendObj->getAttackArea()->setBrush(QBrush(Qt::NoBrush));
     game->gameStatus = GameControl::normal;
     delete friendObj->tick;
-    friendObj->die();
+    friendObj->die(false);
     delete this;
 }
 

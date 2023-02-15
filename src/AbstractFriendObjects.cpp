@@ -7,6 +7,7 @@
 #include "GameControl.h"
 #include "Pointer.h"
 #include <QDebug>
+//#include <dbghelp.h>
 #include "AbstractEnemy.h"
 
 extern GameControl *game;
@@ -18,9 +19,10 @@ AbstractFriendObjects::AbstractFriendObjects(int blockNum_, int cost_, double he
                                              QString MSFileName,
                                              QGraphicsRectItem *parent)
         : QGraphicsRectItem(parent), healthLimit(healthLimit_), health(healthLimit_),
-          atk(atk_), def(def_), atkInterval(atkInterval_/2.0), blockNum(blockNum_),
+          atk(atk_), def(def_), atkInterval(atkInterval_ / 2.0), blockNum(blockNum_),
           cost(cost_), appearanceFileName(std::move(appearFileName)),
-          MugShotFileName(std::move(MSFileName)),hpBar(nullptr),hpFullBar(nullptr),mode(MugShot) {
+          MugShotFileName(std::move(MSFileName)), hpBar(nullptr), hpFullBar(nullptr),
+          mode(MugShot) {
     //初始化图片
     appearance = new QGraphicsPixmapItem(this);
     setAppearance(MugShot);
@@ -38,6 +40,7 @@ void AbstractFriendObjects::setAppearance(appearanceMode a) {
         setPen(QPen(Qt::SolidLine));
         appearance->setPixmap(look);
         appearance->setOffset(0, 0);
+        showCost();
         mode = MugShot;
     } else if (a == Fight) {
         QPixmap look = QPixmap{appearanceFileName}.scaledToHeight(game->gridSizeY * 1.2);
@@ -60,13 +63,15 @@ void AbstractFriendObjects::setAppearance(appearanceMode a) {
         QPixmap look = QPixmap{appearanceFileName}.scaledToHeight(game->gridSizeY * 1.2);
         appearance->setPixmap(look);
         appearance->setOffset((double) -game->gridSizeX / 2, (double) -game->gridSizeY / 2);
+        hideCost();
         mode = underCursor;
         setPen(QPen(Qt::NoPen));
     }
 }
 
 void AbstractFriendObjects::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    if (game->gameStatus == GameControl::normal && mode == MugShot) {
+    if (game->gameStatus == GameControl::normal && mode == MugShot &&
+        game->costBoard->minusCost(cost)) {
         game->cursor = this;
         setAppearance(underCursor);
         game->gameStatus = GameControl::build;
@@ -74,8 +79,8 @@ void AbstractFriendObjects::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         else game->setAirGridGreen(true);
     } else if (game->gameStatus == GameControl::normal && mode == Fight) {
         game->gameStatus = GameControl::showDetail;
-        attackArea->setBrush(QBrush(QColor(Qt::blue), Qt::CrossPattern));
-        attackArea->setOpacity(20);
+        attackArea->setBrush(QBrush(QColor(Qt::blue), Qt::FDiagPattern));
+        attackArea->setOpacity(0.8);
         tick = new Tick(this);
         cross = new Cross(this);
         scene()->addItem(tick);
@@ -133,6 +138,8 @@ void AbstractFriendObjects::setDir(directions dir) {
     game->gameStatus = GameControl::normal;
     connect(&friendTimer, SIGNAL(timeout()), this, SLOT(acquireTarget()));
     friendTimer.start(20);
+    readyToAttack = true;
+    emit fightStart();
 }
 
 AbstractFriendObjects::friendType AbstractFriendObjects::intToFriendType(int type) {
@@ -213,11 +220,12 @@ void AbstractFriendObjects::beAttacked(double damage) {
     if (realDamage < damage * 0.05) realDamage = damage * 0.05;
     health = health - realDamage;
     setHpBar();
-    if (health <= 0) die();
+    if (health <= 0) die(true);
 }
 
-void AbstractFriendObjects::die() {
-//    emit dieSignal();
+void AbstractFriendObjects::die(bool beKilled) {
+    if (!beKilled) game->costBoard->addCost(cost / 2);
+    if (cost * 1.5 <= 99) cost *= 1.5;
     for (auto i: blockList) i->free();
     setAppearance(MugShot);
     setPos(location);
@@ -226,11 +234,28 @@ void AbstractFriendObjects::die() {
     delete hpFullBar;
     friendTimer.stop();
     attackTimer.stop();
+    emit fightStop();
+    emit dieSignal();
 }
 
 void AbstractFriendObjects::beHealed(double damage) {
-    health = health+damage;
-    if(health>healthLimit) health = healthLimit;
+    health = health + damage;
+    if (health > healthLimit) health = healthLimit;
     setHpBar();
+}
+
+void AbstractFriendObjects::hideCost() {
+    delete costBg;
+    delete costDisplay;
+}
+
+void AbstractFriendObjects::showCost() {
+    costBg = new QGraphicsRectItem(0,0,40,40,this);
+    costBg->setPen(QPen(Qt::NoPen));
+    costBg->setBrush(QBrush(Qt::gray));
+    costBg->setOpacity(0.8);
+    costDisplay = new QGraphicsTextItem(this);
+    costDisplay->setPlainText(QString::number(cost));
+    costDisplay->setFont(QFont("Consolas",18));
 }
 

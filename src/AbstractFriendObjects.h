@@ -58,8 +58,8 @@ public:
     Tick *tick{};
     Cross *cross{};
 
-    virtual void die();
-    double getHealthPercent(){return health/healthLimit;}
+    virtual void die(bool beKilled);
+    double getHealthPercent() const{return health/healthLimit;}
     appearanceMode getMode(){return mode;}
     void beHealed(double damage);
 
@@ -80,8 +80,8 @@ private:
 
 
 protected:
-    const int blockNum, cost;
-    const double healthLimit, atk, def, atkInterval;
+    int blockNum, cost;
+    double healthLimit, atk, def, atkInterval;
     double health;
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -100,6 +100,10 @@ protected:
     QGraphicsPolygonItem *attackArea{};
 
     bool readyToAttack;
+    void showCost();
+    void hideCost();
+    QGraphicsRectItem* costBg;
+    QGraphicsTextItem* costDisplay;
 public slots:
 
     virtual void acquireTarget();
@@ -107,6 +111,8 @@ public slots:
 signals:
 
     void dieSignal();
+    void fightStart();
+    void fightStop();
 
 };
 

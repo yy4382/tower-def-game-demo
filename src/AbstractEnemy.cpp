@@ -17,7 +17,8 @@ AbstractEnemy::AbstractEnemy(const enemyBasicAttr &a) : appearanceFileName(a.app
                                                         isBlocked(nullptr) {
     //设置位置和大小
     setPos(path[pathIndex].x(), path[pathIndex].y());
-    setRect(game->gridSizeX / 2 - 2.5, game->gridSizeY / 2 - 2.5, 5, 5);
+    setRect(game->gridSizeX / 2 - 10, game->gridSizeY / 2 - 10, 20, 20);
+    setPen(QPen(Qt::NoPen));
     bool ifFlipped = false;
     QLineF ln(pos(), path[pathIndex + 1]);
     if (ln.angle() > 90 && ln.angle() < 270) ifFlipped = true;
@@ -81,7 +82,9 @@ double AbstractEnemy::distanceLeft() {
 }
 
 void AbstractEnemy::beAttacked(double damage) {
-    health = health - damage + def;
+    double realDamage = damage - def;
+    if (realDamage < damage * 0.05) realDamage = damage * 0.05;
+    health = health - realDamage;
     setHpBar();
     if (health <= 0) die(hp_0);
 }
