@@ -8,8 +8,12 @@
 
 extern GameControl *game;
 
-Pointer::Pointer(QPointF pos, double angle, AbstractFriendObjects::directions dir,
-                 AbstractFriendObjects *master) : dir(dir), master(master) {
+Pointer::Pointer(QPointF pos,
+                 double angle,
+                 AbstractFriendObjects::directions dir,
+                 AbstractFriendObjects *master)
+        : dir(dir),
+          master(master) {
     setPixmap(QPixmap("://images/pointer.png"));
     setRotation(angle);
     setPos(pos);
@@ -17,5 +21,5 @@ Pointer::Pointer(QPointF pos, double angle, AbstractFriendObjects::directions di
 
 void Pointer::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     master->setDir(dir);
-    delete [] game->pointers;
+    delete[] game->pointers;
 }

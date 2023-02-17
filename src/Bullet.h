@@ -20,7 +20,10 @@ public:
         TargetFriend, TargetEnemy
     };
 
-    Bullet(QGraphicsItem *target, bulletEffect effect, QPointF initPos, double damageNum);
+    Bullet(QGraphicsItem *target,
+           bulletEffect effect,
+           QPointF initPos,
+           double damageNum);
 
     ~Bullet() override;
 
@@ -32,7 +35,7 @@ private:
     QTimer *moveTimer;
     bulletEffect effect;
     targetType theTargetType;
-    bool ifdestroy;
+    bool ifDestroy;
 public slots:
 
     void move();

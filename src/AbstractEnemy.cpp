@@ -9,25 +9,31 @@
 extern GameControl *game;
 
 AbstractEnemy::AbstractEnemy(const enemyBasicAttr &a) : appearanceFileName(a.appearance),
-                                                        path(a.path), pathIndex(0),
+                                                        path(a.path),
+                                                        pathIndex(0),
                                                         healthLimit(a.healthLimit),
                                                         health(healthLimit),
-                                                        atk(a.atk), def(a.def), speed(a.speed),
+                                                        atk(a.atk),
+                                                        def(a.def),
+                                                        speed(a.speed),
                                                         isFlyingObject(a.isFlyingObject),
                                                         isBlocked(nullptr) {
-    //设置位置和大小
+    //设置碰撞箱位置和大小
     setPos(path[pathIndex].x(), path[pathIndex].y());
     setRect(game->gridSizeX / 2 - 10, game->gridSizeY / 2 - 10, 20, 20);
     setPen(QPen(Qt::NoPen));
+
+    //设置初始图像
     bool ifFlipped = false;
     QLineF ln(pos(), path[pathIndex + 1]);
     if (ln.angle() > 90 && ln.angle() < 270) ifFlipped = true;
     appearance = new QGraphicsPixmapItem(this);
     setAppearance(ifFlipped);
 
+    //初始化血条
     initHpBar();
 
-    //敌人活动的计时器
+    //敌人运动的计时器
     enemyMoveTimer = new QTimer();
     connect(enemyMoveTimer, SIGNAL(timeout()), this, SLOT(move()));
     enemyMoveTimer->start(20);
@@ -70,7 +76,9 @@ void AbstractEnemy::die(dieType cause) {
 
 void AbstractEnemy::setAppearance(bool ifFlipped) {
     QPixmap look{appearanceFileName};
-    if (ifFlipped) look = look.transformed(QTransform().scale(-1, 1));
+    if (ifFlipped)
+        look = look
+                .transformed(QTransform().scale(-1, 1));
     look = look.scaledToWidth(game->gridSizeX);
     appearance->setPixmap(look);
     appearance->setOffset(0, -look.height() + game->gridSizeY * 0.8);
@@ -90,12 +98,18 @@ void AbstractEnemy::beAttacked(double damage) {
 }
 
 void AbstractEnemy::setHpBar() {
-    hpBar->setRect(10, game->gridSizeY - 20, health / healthLimit * (game->gridSizeX - 20), 10);
+    hpBar->setRect(10,
+                   game->gridSizeY - 20,
+                   health / healthLimit * (game->gridSizeX - 20),
+                   10);
 }
 
 void AbstractEnemy::initHpBar() {
     hpFullBar = new QGraphicsRectItem(this);
-    hpFullBar->setRect(10, game->gridSizeY - 20, health / healthLimit * (game->gridSizeX - 20), 10);
+    hpFullBar->setRect(10,
+                       game->gridSizeY - 20,
+                       health / healthLimit * (game->gridSizeX - 20),
+                       10);
     hpBar = new QGraphicsRectItem(this);
     setHpBar();
     QBrush hpBrush(Qt::red, Qt::SolidPattern);
@@ -105,18 +119,19 @@ void AbstractEnemy::initHpBar() {
 void AbstractEnemy::blocked(QGraphicsRectItem *friendObj) {
     enemyMoveTimer->stop();
     isBlocked = friendObj;
-    enemyAttackTimer.start(2.0/speed*1000);
-    connect(&enemyAttackTimer, SIGNAL(timeout()),this, SLOT(attack()),Qt::UniqueConnection);
+    enemyAttackTimer.start(2.0 / speed * 1000);
+    connect(&enemyAttackTimer, SIGNAL(timeout()),
+            this, SLOT(attack()), Qt::UniqueConnection);
 }
 
 void AbstractEnemy::attack() {
-    AbstractFriendObjects* friendObj = dynamic_cast<AbstractFriendObjects*>(isBlocked);
+    AbstractFriendObjects *friendObj = dynamic_cast<AbstractFriendObjects *>(isBlocked);
     friendObj->beAttacked(atk);
 }
 
 void AbstractEnemy::beHealed(double damage) {
-    health = health+damage;
-    if(health>healthLimit) health = healthLimit;
+    health = health + damage;
+    if (health > healthLimit) health = healthLimit;
     setHpBar();
 }
 

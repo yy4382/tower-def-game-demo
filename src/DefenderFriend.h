@@ -12,9 +12,15 @@ class DefenderFriend : public AbstractFriendObjects {
 public:
     friendType getType() override { return Defender; }
 
-    DefenderFriend(int blockNum, int cost, double healthLimit, double atk, double def,
-                   double atkInterval, const QString &appearanceFileName,
-                   const QString &msFileName,QGraphicsRectItem *parent = nullptr);
+    DefenderFriend(int blockNum,
+                   int cost,
+                   double healthLimit,
+                   double atk,
+                   double def,
+                   double atkInterval,
+                   const QString &appearanceFileName,
+                   const QString &msFileName,
+                   QGraphicsRectItem *parent = nullptr);
 };
 
 

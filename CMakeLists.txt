@@ -20,7 +20,22 @@ add_executable(TowerDef
         src/AbstractGrid.cpp src/AbstractGrid.h
         src/GroundGrid.cpp src/GroundGrid.h
         res.qrc
-        src/AirGrid.cpp src/AirGrid.h src/GateGrid.cpp src/GateGrid.h src/AbstractEnemy.cpp src/AbstractEnemy.h src/AbstractFriendObjects.cpp src/AbstractFriendObjects.h src/DefenderFriend.cpp src/DefenderFriend.h src/ShooterFriend.cpp src/ShooterFriend.h src/VanguardFriend.cpp src/VanguardFriend.h src/HealerFriend.cpp src/HealerFriend.h src/SplashCasterFriend.cpp src/SplashCasterFriend.h src/Pointer.cpp src/Pointer.h src/Bullet.cpp src/Bullet.h src/ScoreBoard.cpp src/ScoreBoard.h src/Tick.cpp src/Tick.h src/Cross.cpp src/Cross.h src/CostBoard.cpp src/CostBoard.h)
+        src/AirGrid.cpp src/AirGrid.h
+        src/GateGrid.cpp src/GateGrid.h
+        src/AbstractEnemy.cpp src/AbstractEnemy.h
+        src/AbstractFriendObjects.cpp src/AbstractFriendObjects.h
+        src/DefenderFriend.cpp src/DefenderFriend.h
+        src/ShooterFriend.cpp src/ShooterFriend.h
+        src/VanguardFriend.cpp src/VanguardFriend.h
+        src/HealerFriend.cpp src/HealerFriend.h
+        src/SplashCasterFriend.cpp src/SplashCasterFriend.h
+        src/Pointer.cpp src/Pointer.h
+        src/Bullet.cpp src/Bullet.h
+        src/ScoreBoard.cpp src/ScoreBoard.h
+        src/Tick.cpp src/Tick.h
+        src/Cross.cpp src/Cross.h
+        src/CostBoard.cpp src/CostBoard.h
+        )
 target_link_libraries(TowerDef
         Qt5::Core
         Qt5::Gui

@@ -3,6 +3,13 @@
 //
 
 #include "AirGrid.h"
-AirGrid::AirGrid(int sizeX, int sizeY, const QPointF &location, const QString &appr,
-                 const QString &greenAppr, bool _deployability, QGraphicsPixmapItem *parent)
-        : AbstractGrid(location, sizeX, sizeY, appr,greenAppr, parent), deployAbility(_deployability) {}
+
+AirGrid::AirGrid(int sizeX,
+                 int sizeY,
+                 const QPointF &location,
+                 const QString &appr,
+                 const QString &greenAppr,
+                 bool _deployability,
+                 QGraphicsPixmapItem *parent)
+        : AbstractGrid(location, sizeX, sizeY, appr, greenAppr, parent),
+          deployAbility(_deployability) {}

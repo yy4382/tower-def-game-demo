@@ -7,13 +7,16 @@
 
 extern GameControl *game;
 
-CostBoard::CostBoard(int initCost) : curCost(initCost), warningShowing(false) {
+CostBoard::CostBoard(int initCost) : curCost(initCost),
+                                     warningShowing(false) {
     setPlainText("cost: " + QString::number(initCost));
     setFont(QFont("Consolas", 28));
-    connect(&costTimer, &QTimer::timeout, [this]() {
-        addCost(1);
-    });
+    connect(&costTimer, &QTimer::timeout,
+            [this]() {
+                addCost(1);
+            });
     costTimer.start(500);
+
     costBoardBg = new QGraphicsRectItem(0, 0, 230, 60, this);
     costBoardBg->setBrush(QBrush(Qt::gray, Qt::SolidPattern));
     costBoardBg->setPen(QPen(Qt::NoPen));
@@ -27,7 +30,9 @@ bool CostBoard::minusCost(int cost) {
             scene()->addItem(game->warning);
             warningShowing = true;
             warningTimer.start(1500);
-            connect(&warningTimer,&QTimer::timeout,this,&CostBoard::removeWarning,Qt::UniqueConnection);
+            connect(&warningTimer, &QTimer::timeout,
+                    this, &CostBoard::removeWarning,
+                    Qt::UniqueConnection);
         }
         return false;
     }

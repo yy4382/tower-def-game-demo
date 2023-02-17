@@ -43,13 +43,14 @@ GameControl::GameControl() : curBirthEnemy(0) {
     friendInit->setSingleShot(true);
     connect(friendInit, SIGNAL(timeout()), this, SLOT(initFriend()));
     friendInit->start(10);
-    connect(friendInit, &QTimer::timeout, [this]() {
-        scoreBoard = new ScoreBoard;
-        scene->addItem(scoreBoard);
-        costBoard = new CostBoard(initCost);
-        scene->addItem(costBoard);
-        costBoard->setPos(scene->width() - 250, 0);
-    });
+    connect(friendInit, &QTimer::timeout,
+            [this]() {
+                scoreBoard = new ScoreBoard;
+                scene->addItem(scoreBoard);
+                costBoard = new CostBoard(initCost);
+                scene->addItem(costBoard);
+                costBoard->setPos(scene->width() - 250, 0);
+            });
 
     // 初始化warning
     warning = new QGraphicsTextItem;
@@ -66,7 +67,9 @@ void GameControl::initBackground() {
         for (int j = 0; j < rowX; j++) {
             if ((gridAttrList->at(index))->type != "null") {
                 //Gate
-                auto *grid = new GateGrid(gridSizeX, gridSizeY, QPointF(x, y),
+                auto *grid = new GateGrid(gridSizeX,
+                                          gridSizeY,
+                                          QPointF(x, y),
                                           (gridAttrList->at(index))->appearance,
                                           (gridAttrList->at(index))->greenAppearance,
                                           (gridAttrList->at(index))->type);
@@ -74,7 +77,9 @@ void GameControl::initBackground() {
                 gridList << grid;
             } else if ((gridAttrList->at(index))->ground == 1) {
                 //ground grid
-                auto *grid = new GroundGrid(gridSizeX, gridSizeY, QPointF(x, y),
+                auto *grid = new GroundGrid(gridSizeX,
+                                            gridSizeY,
+                                            QPointF(x, y),
                                             (gridAttrList->at(index))->appearance,
                                             (gridAttrList->at(index))->greenAppearance,
                                             (gridAttrList->at(index))->deployability);
@@ -82,7 +87,9 @@ void GameControl::initBackground() {
                 gridList << grid;
             } else if ((gridAttrList->at(index))->ground == 0) {
                 // air grid
-                auto *grid = new AirGrid(gridSizeX, gridSizeY, QPointF(x, y),
+                auto *grid = new AirGrid(gridSizeX,
+                                         gridSizeY,
+                                         QPointF(x, y),
                                          (gridAttrList->at(index))->appearance,
                                          (gridAttrList->at(index))->greenAppearance,
                                          (gridAttrList->at(index))->deployability);
@@ -130,40 +137,44 @@ void GameControl::initFriend() {
         AbstractFriendObjects *friendObj;
         switch (i->type) {
             case AbstractFriendObjects::Shooter:
-                friendObj = new ShooterFriend(i->blockNum, i->cost,
+                friendObj = new ShooterFriend(i->blockNum,
+                                              i->cost,
                                               i->healthLimit,
                                               i->atk,
                                               i->def,
                                               i->atkInterval,
                                               i->appearanceFileName,
-                                              i->MugShotFileName);
+                                              i->HeadShotFileName);
                 break;
             case AbstractFriendObjects::Defender:
-                friendObj = new DefenderFriend(i->blockNum, i->cost,
+                friendObj = new DefenderFriend(i->blockNum,
+                                               i->cost,
                                                i->healthLimit,
                                                i->atk,
                                                i->def,
                                                i->atkInterval,
                                                i->appearanceFileName,
-                                               i->MugShotFileName);
+                                               i->HeadShotFileName);
                 break;
             case AbstractFriendObjects::Vanguard:
-                friendObj = new VanguardFriend(i->blockNum, i->cost,
+                friendObj = new VanguardFriend(i->blockNum,
+                                               i->cost,
                                                i->healthLimit,
                                                i->atk,
                                                i->def,
                                                i->atkInterval,
                                                i->appearanceFileName,
-                                               i->MugShotFileName);
+                                               i->HeadShotFileName);
                 break;
             case AbstractFriendObjects::Healer:
-                friendObj = new HealerFriend(i->blockNum, i->cost,
+                friendObj = new HealerFriend(i->blockNum,
+                                             i->cost,
                                              i->healthLimit,
                                              i->atk,
                                              i->def,
                                              i->atkInterval,
                                              i->appearanceFileName,
-                                             i->MugShotFileName);
+                                             i->HeadShotFileName);
                 break;
             case AbstractFriendObjects::SplashCaster:
                 friendObj = new SplashCasterFriend(i->blockNum, i->cost,
@@ -172,7 +183,7 @@ void GameControl::initFriend() {
                                                    i->def,
                                                    i->atkInterval,
                                                    i->appearanceFileName,
-                                                   i->MugShotFileName);
+                                                   i->HeadShotFileName);
                 break;
             case AbstractFriendObjects::null:
                 break;
@@ -219,22 +230,30 @@ void GameControl::mouseMoveEvent(QMouseEvent *event) {
 void GameControl::setAirGridGreen(bool g) {
     if (g)
         for (auto i: gridList) {
-            if (i->getType() == AbstractGrid::airGrid && i->getDeployAbility()) i->setGreen();
+            if (i->getType() == AbstractGrid::airGrid &&
+                i->getDeployAbility())
+                i->setGreen();
         }
     else
         for (auto i: gridList) {
-            if (i->getType() == AbstractGrid::airGrid && i->getDeployAbility()) i->setDefault();
+            if (i->getType() == AbstractGrid::airGrid &&
+                i->getDeployAbility())
+                i->setDefault();
         }
 }
 
 void GameControl::setGroundGridGreen(bool g) {
     if (g)
         for (auto i: gridList) {
-            if (i->getType() == AbstractGrid::groundGrid && i->getDeployAbility()) i->setGreen();
+            if (i->getType() == AbstractGrid::groundGrid &&
+                i->getDeployAbility())
+                i->setGreen();
         }
     else
         for (auto i: gridList) {
-            if (i->getType() == AbstractGrid::groundGrid && i->getDeployAbility()) i->setDefault();
+            if (i->getType() == AbstractGrid::groundGrid &&
+                i->getDeployAbility())
+                i->setDefault();
         }
 }
 
@@ -289,10 +308,16 @@ void GameControl::readInfo(const QString &mapName) {
 
         byteArrayRead = qFile.readLine();
         if (byteArrayRead.trimmed() == "#end") {
-            auto temp = new GridAttr(appr, greenAppr, deploy, ground);
+            auto temp = new GridAttr(appr,
+                                     greenAppr,
+                                     deploy,
+                                     ground);
             *gridAttrType << temp;
         } else {
-            auto temp = new GridAttr(appr, greenAppr, deploy, ground, QString(byteArrayRead));
+            auto temp = new GridAttr(appr,
+                                     greenAppr,
+                                     deploy, ground,
+                                     QString(byteArrayRead));
             *gridAttrType << temp;
             byteArrayRead = qFile.readLine();
         }
@@ -348,7 +373,8 @@ void GameControl::readInfo(const QString &mapName) {
         tempEnemyType->def = listRead[2].toDouble();
         tempEnemyType->speed = listRead[3].toDouble();
         tempEnemyType->fly = listRead[4].toInt();
-        tempEnemyType->appearance = QString(listRead[5]).left(QString(listRead[5]).length() - 2);
+        tempEnemyType->appearance = QString(listRead[5])
+                .left(QString(listRead[5]).length() - 2);
         *enemyTypeList << tempEnemyType;
         byteArrayRead = qFile.readLine();
         if (byteArrayRead.trimmed() == "#endEnemyType") break;
@@ -363,7 +389,8 @@ void GameControl::readInfo(const QString &mapName) {
     while (true) {
         int typeIndex = listRead[0].trimmed().toInt();
         int pathIndex = listRead[1].trimmed().toInt();
-        *enemyAttrList << new enemyBasicAttr{listRead[2].trimmed().toInt(), pathType->at(pathIndex),
+        *enemyAttrList << new enemyBasicAttr{listRead[2].trimmed().toInt(),
+                                             pathType->at(pathIndex),
                                              enemyTypeList->at(typeIndex)->healthLimit,
                                              enemyTypeList->at(typeIndex)->atk,
                                              enemyTypeList->at(typeIndex)->def,

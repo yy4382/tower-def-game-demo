@@ -10,9 +10,15 @@
 
 extern GameControl *game;
 
-Bullet::Bullet(QGraphicsItem *target, bulletEffect effect, QPointF initPos, double damageNum)
-        : target(target), effect(effect), damageNum(damageNum),ifdestroy(false) {
+Bullet::Bullet(QGraphicsItem *target,
+               bulletEffect effect,
+               QPointF initPos,
+               double damageNum)
+        : target(target), effect(effect),
+          damageNum(damageNum),
+          ifDestroy(false) {
     enemyTarget = dynamic_cast<AbstractEnemy *>(target);
+
     if (enemyTarget) {
         theTargetType = TargetEnemy;
         connect(enemyTarget, &AbstractEnemy::dieSignal, this, &Bullet::destroy,
@@ -24,10 +30,13 @@ Bullet::Bullet(QGraphicsItem *target, bulletEffect effect, QPointF initPos, doub
         connect(friendTarget, &AbstractFriendObjects::dieSignal, this, &Bullet::destroy,
                 Qt::UniqueConnection);
     }
+
     setPos(initPos);
-    if(effect==damage) setPixmap(QPixmap("://images/bullet.png"));
-    if(effect == heal) setPixmap(QPixmap("://images/bulletHeal.png"));
+    if (effect == damage) setPixmap(QPixmap("://images/bullet.png"));
+    if (effect == heal) setPixmap(QPixmap("://images/bulletHeal.png"));
+
     speed = 25;
+
     moveTimer = new QTimer;
     moveTimer->start(20);
     connect(moveTimer, &QTimer::timeout, this, &Bullet::move);
@@ -35,13 +44,17 @@ Bullet::Bullet(QGraphicsItem *target, bulletEffect effect, QPointF initPos, doub
 
 void Bullet::move() {
 //    QGraphicsItem* tempTarget = target;
-    if(ifdestroy){
+    if (ifDestroy) {
         delete this;
         return;
     }
+
     bool ifCollides;
-    if (theTargetType == TargetEnemy) ifCollides = collidesWithItem(enemyTarget);
-    else ifCollides = collidesWithItem(friendTarget);
+    if (theTargetType == TargetEnemy)
+        ifCollides = collidesWithItem(enemyTarget);
+    else
+        ifCollides = collidesWithItem(friendTarget);
+
     if (ifCollides) {
         this->disconnect();
         if (effect == damage) {
@@ -62,8 +75,10 @@ void Bullet::move() {
         delete this;
         return;
     }
+
     QLineF ln(this->pos(),
-              QPointF(target->x() + game->gridSizeX / 2.0, target->y() + game->gridSizeY / 2.0));
+              QPointF(target->x() + game->gridSizeX / 2.0,
+                      target->y() + game->gridSizeY / 2.0));
     setRotation(-ln.angle());
     double theta = -1 * ln.angle();
     double dy = speed * qSin(qDegreesToRadians(theta));
@@ -76,5 +91,5 @@ Bullet::~Bullet() {
 }
 
 void Bullet::destroy() {
-    ifdestroy = true;
+    ifDestroy = true;
 }

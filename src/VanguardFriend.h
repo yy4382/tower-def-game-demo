@@ -12,8 +12,14 @@ Q_OBJECT
 public:
     virtual friendType getType() { return Vanguard; }
 
-    VanguardFriend(int blockNum, int cost, double healthLimit, double atk, double def,
-                   double atkInterval, const QString &appearFileName, const QString &msFileName,
+    VanguardFriend(int blockNum,
+                   int cost,
+                   double healthLimit,
+                   double atk,
+                   double def,
+                   double atkInterval,
+                   const QString &appearFileName,
+                   const QString &msFileName,
                    QGraphicsRectItem *parent = nullptr);
 
 public slots:

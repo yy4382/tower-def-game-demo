@@ -7,9 +7,15 @@
 
 extern GameControl *game;
 
-ScoreBoard::ScoreBoard() : currentKill(0), hpLeft(game->mapHealth()) {
-    setPlainText(QString("Score: 0/") + QString::number(game->enemySum()) + " Health: " +
-                 QString::number(hpLeft) + QString("/") + QString::number(hpLeft));
+ScoreBoard::ScoreBoard()
+        : currentKill(0),
+          hpLeft(game->mapHealth()) {
+    setPlainText(
+            QString("Score: 0/")
+            + QString::number(game->enemySum()) + " Health: "
+            + QString::number(hpLeft)
+            + QString("/")
+            + QString::number(hpLeft));
     setFont(QFont("times", 28));
 }
 
@@ -26,8 +32,11 @@ void ScoreBoard::hpMinus() {
 void ScoreBoard::killAdd() {
     currentKill++;
     setPlainText(
-            "Score: " + QString::number(currentKill) + "/" + QString::number(game->enemySum()) +
-            " Health: " + QString::number(hpLeft) + "/" + QString::number(game->mapHealth()));
+            "Score: "
+            + QString::number(currentKill)
+            + "/" + QString::number(game->enemySum())
+            + " Health: " + QString::number(hpLeft)
+            + "/" + QString::number(game->mapHealth()));
     if (currentKill == game->enemySum()) {
         game->gameOver(true);
         delete this;
